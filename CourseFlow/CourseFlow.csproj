@@ -1,0 +1,41 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Images\Antonio_Square Profile Picture.png" />
+    <None Remove="Images\Antoni_Square Profile Picture.png" />
+    <None Remove="Images\CIT-U CPE Logo Blue.png" />
+    <None Remove="Images\CIT-U CPE Logo Original.png" />
+    <None Remove="Images\CIT-U_ENTRANCE_TO_RTL.jpg" />
+    <None Remove="Images\Dashboard.png" />
+    <None Remove="Images\FeatureNotYetAvailable.png" />
+    <None Remove="Images\icons8-password-16.png" />
+    <None Remove="Images\icons8-user-16.png" />
+    <None Remove="Images\KenetteProfilePicture.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Dapper" Version="2.0.123" />
+    <PackageReference Include="FontAwesome.WPF" Version="4.7.0.9" />
+    <PackageReference Include="System.Data.OleDb" Version="8.0.0-preview.3.23174.8" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Images\Antonio_Square Profile Picture.png" />
+    <Resource Include="Images\CIT-U CPE Logo Blue.png" />
+    <Resource Include="Images\CIT-U CPE Logo Original.png" />
+    <Resource Include="Images\CIT-U_ENTRANCE_TO_RTL.jpg" />
+    <Resource Include="Images\Dashboard.png" />
+    <Resource Include="Images\FeatureNotYetAvailable.png" />
+    <Resource Include="Images\icons8-password-16.png" />
+    <Resource Include="Images\icons8-user-16.png" />
+  </ItemGroup>
+
+</Project>

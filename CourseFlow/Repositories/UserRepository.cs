@@ -31,6 +31,8 @@ namespace CourseFlow.Repositories
 
         public void Edit(UserModel userModel)
         {
+            AcademicCourseModel model = new AcademicCourseModel();
+            model.AcademicYear.ToString();
             throw new NotImplementedException();
         }
 

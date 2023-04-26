@@ -31,8 +31,6 @@ namespace CourseFlow.Repositories
 
         public void Edit(UserModel userModel)
         {
-            AcademicCourseModel model = new AcademicCourseModel();
-            model.AcademicYear.ToString();
             throw new NotImplementedException();
         }
 
@@ -62,7 +60,6 @@ namespace CourseFlow.Repositories
                     {
                         user = new UserModel()
                         {
-                            Id = reader[0].ToString(),
                             Username = reader[1].ToString(),
                             Password = string.Empty,
                             FirstName = reader[3].ToString(),

@@ -1,14 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace CourseFlow.Models
+﻿namespace CourseFlow.Models
 {
-    public class YearLevelModel
+    public class YearLevelModel : AuditableEntity
     {
-        public string YearLevelName { get; set; }
-
+        public string YearLevel { get; set; }
     }
 }

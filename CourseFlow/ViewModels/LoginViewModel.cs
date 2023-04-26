@@ -1,5 +1,4 @@
-﻿using CourseFlow.Models;
-using CourseFlow.Repositories;
+﻿using CourseFlow.Repositories;
 using System;
 using System.Security;
 using System.Security.Principal;

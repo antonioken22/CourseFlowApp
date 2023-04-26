@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Net;
+using CourseFlow.Models;
 
-namespace CourseFlow.Models
+namespace CourseFlow.Repositories
 {
     public interface IUserRepository
     {

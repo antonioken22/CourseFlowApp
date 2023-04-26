@@ -1,5 +1,5 @@
 ﻿using System.Configuration;
-using System.Data.SqlClient;
+using System.Data.OleDb;
 
 namespace CourseFlow.Repositories
 {
@@ -12,9 +12,9 @@ namespace CourseFlow.Repositories
             _connectionString = ConfigurationManager.ConnectionStrings["CourseFlow"].ConnectionString;
         }
 
-        protected SqlConnection GetConnection()
+        protected OleDbConnection GetConnection()
         {
-            return new SqlConnection(_connectionString);
+            return new OleDbConnection(_connectionString);
         }
     }
 }

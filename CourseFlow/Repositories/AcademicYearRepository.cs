@@ -41,7 +41,7 @@ namespace CourseFlow.Repositories
                         {
                             academicYears.Add(new AcademicYearModel
                             {
-                                AcademicYearID = Convert.ToInt32(reader["AcademicYearID"]),
+                                Id = Convert.ToInt32(reader["AcademicYearID"]),
                                 AcademicYear = reader["AcademicYear"].ToString(),
                             });
                         }

@@ -5,6 +5,10 @@ using System.Windows.Input;
 using System.Linq;
 using System.Collections.Generic;
 using System;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace CourseFlow.ViewModels
 {
@@ -20,7 +24,16 @@ namespace CourseFlow.ViewModels
 
         // Properties
         public CourseModel SelectedCourse { get; set; }
-        public AcademicYearModel SelectedAcademicYear { get; set; }
+
+        private AcademicYearModel selectedAcademicYear;
+        public AcademicYearModel SelectedAcademicYear
+        {
+            get => selectedAcademicYear;
+            set
+            {
+                selectedAcademicYear = value;
+            }
+        }
 
         public ObservableCollection<CourseModel> Courses { get; set; }
         public ObservableCollection<AcademicYearModel> AcademicYears { get; set; }
@@ -40,6 +53,29 @@ namespace CourseFlow.ViewModels
         public ICommand LoadSubjectRelationshipsCommand { get; }
         public ICommand LoadFlowsheetCommand { get; }
 
+      
+        // Events
+
+        public ICommand OnPageLoadCommand { get; }
+        public ICommand OnMouseEnter { get; }
+        public ICommand OnMouseLeave { get; }
+
+        // Control Componens
+        private Brush textColor;
+        public Brush TextColor
+        {
+            get => textColor;
+            set
+            {
+                if (value is not null)
+                {
+                    textColor = value;
+                    OnPropertyChanged(nameof(TextColor));
+                }
+                else textColor = null;
+
+            }
+        }
 
         // Constructors
         public CourseFlowsheetViewModel()
@@ -67,9 +103,30 @@ namespace CourseFlow.ViewModels
             LoadFlowsheetCommand = new ViewModelCommand(param => LoadFlowsheet());
 
             YearLevelSubjectsCollection = new ObservableCollection<YearLevelSubjects>();
+
+            OnPageLoadCommand = new ViewModelCommand(param => OnPageLoad());
+            OnMouseEnter = new ViewModelCommand(param => OnMouseIn());
+            OnMouseLeave = new ViewModelCommand(param => OnMouseOut());
         }
 
         // Methods
+
+        private void OnMouseIn()
+        {
+            TextColor = Brushes.Red;
+        }
+
+        private void OnMouseOut()
+        {
+            TextColor = Brushes.White;
+        }
+
+        private void OnPageLoad()
+        {
+            LoadCourses();
+            LoadAcademicYears();
+        }
+
         private void LoadCourses()
         {
             var courses = _courseRepository.GetAll();
@@ -78,6 +135,7 @@ namespace CourseFlow.ViewModels
             {
                 Courses.Add(course);
             }
+            OnPropertyChanged(nameof(Courses));
         }
 
         private void LoadAcademicYears()
@@ -88,6 +146,7 @@ namespace CourseFlow.ViewModels
             {
                 AcademicYears.Add(academicYear);
             }
+            OnPropertyChanged(nameof(AcademicYears));
         }
 
         private void LoadYearLevels()
@@ -138,7 +197,7 @@ namespace CourseFlow.ViewModels
             }
 
             // Retrieve subjects for the selected course and academic year
-            var subjects = _subjectRepository.GetByCourseAndAcademicYear(SelectedCourse.CourseID, SelectedAcademicYear.AcademicYearID);
+            var subjects = _subjectRepository.GetByCourseAndAcademicYear(SelectedCourse.Id, SelectedAcademicYear.Id);
 
             // Group subjects by year level and semester
             var subjectsByYearLevelAndSemester = subjects.GroupBy(s => new { s.YearLevelID, s.SemesterID });
@@ -152,8 +211,8 @@ namespace CourseFlow.ViewModels
                 var yearLevelID = group.Key.YearLevelID;
                 var semesterID = group.Key.SemesterID;
 
-                var yearLevel = YearLevels.FirstOrDefault(yl => yl.YearLevelID == yearLevelID);
-                var semester = Semesters.FirstOrDefault(s => s.SemesterID == semesterID);
+                var yearLevel = YearLevels.FirstOrDefault(yl => yl.Id == yearLevelID);
+                var semester = Semesters.FirstOrDefault(s => s.Id == semesterID);
 
                 if (yearLevel == null || semester == null) continue;
 

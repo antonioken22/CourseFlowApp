@@ -47,7 +47,7 @@ namespace CourseFlow.Repositories
                         {
                             subjectRelationships.Add(new SubjectRelationshipModel
                             {
-                                RelationshipID = Convert.ToInt32(reader["RelationshipID"]),
+                                Id = Convert.ToInt32(reader["RelationshipID"]),
                                 SubjectID = Convert.ToInt32(reader["SubjectID"]),
                                 RelatedSubjectID = Convert.ToInt32(reader["RelatedSubjectID"]),
                                 RelationshipType = reader["RelationshipType"].ToString(),

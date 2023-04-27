@@ -48,7 +48,7 @@ namespace CourseFlow.Repositories
                         {
                             subjects.Add(new SubjectModel
                             {
-                                SubjectID = Convert.ToInt32(reader["SubjectID"]),
+                                Id = Convert.ToInt32(reader["SubjectID"]),
                                 SubjectCode = reader["SubjectCode"].ToString(),
                                 SubjectName = reader["SubjectName"].ToString(),
                                 CourseID = Convert.ToInt32(reader["CourseID"]),

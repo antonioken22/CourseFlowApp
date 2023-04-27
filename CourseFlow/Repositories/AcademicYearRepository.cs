@@ -52,5 +52,4 @@ namespace CourseFlow.Repositories
             return academicYears;
         }
     }
-
 }

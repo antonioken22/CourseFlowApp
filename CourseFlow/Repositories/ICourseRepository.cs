@@ -10,6 +10,5 @@ namespace CourseFlow.Repositories
         void Remove(int id);
         CourseModel GetById(int id);
         IEnumerable<CourseModel> GetAll();
-        // ...
     }
 }

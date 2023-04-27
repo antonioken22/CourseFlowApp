@@ -4,10 +4,68 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:CourseFlow.Views"
-             xmlns:controls="clr-namespace:CourseFlow.CustomControls"
+             xmlns:vm="clr-namespace:CourseFlow.ViewModels"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+    
+    <UserControl.DataContext>
+        <vm:CourseFlowsheetViewModel/>
+    </UserControl.DataContext>
     <Grid>
-        <Image Source="/Images/FeatureNotYetAvailable.png"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal" Margin="10">
+            <ComboBox ItemsSource="{Binding Courses}"
+                      SelectedItem="{Binding SelectedCourse}"
+                      DisplayMemberPath="CourseName"
+                      Margin="0,0,10,0"/>
+            <ComboBox ItemsSource="{Binding AcademicYears}"
+                      SelectedItem="{Binding SelectedAcademicYear}"
+                      DisplayMemberPath="AcademicYearName"
+                      Margin="0,0,10,0"/>
+            <Button Content="Load Flowsheet" Command="{Binding LoadFlowsheetCommand}"/>
+        </StackPanel>
+        <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+            <StackPanel Orientation="Vertical" Margin="10">
+                <ItemsControl ItemsSource="{Binding YearLevels}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <GroupBox Header="{Binding YearLevelName}" Margin="0,0,0,10">
+                                <ItemsControl ItemsSource="{Binding Semesters}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <GroupBox Header="{Binding SemesterName}" Margin="0,0,0,10">
+                                                <ItemsControl ItemsSource="{Binding Subjects}">
+                                                    <ItemsControl.ItemTemplate>
+                                                        <DataTemplate>
+                                                            <StackPanel Orientation="Horizontal">
+                                                                <TextBlock Text="{Binding SubjectCode}" FontWeight="Bold" Margin="0,0,5,0"/>
+                                                                <TextBlock Text="{Binding SubjectName}" Margin="0,0,5,0"/>
+                                                            </StackPanel>
+                                                        </DataTemplate>
+                                                    </ItemsControl.ItemTemplate>
+                                                    <ItemsControl.ItemsPanel>
+                                                        <ItemsPanelTemplate>
+                                                            <StackPanel/>
+                                                        </ItemsPanelTemplate>
+                                                    </ItemsControl.ItemsPanel>
+                                                </ItemsControl>
+                                            </GroupBox>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <StackPanel Orientation="Horizontal"/>
+                                        </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
+                                </ItemsControl>
+                            </GroupBox>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
+        </ScrollViewer>
     </Grid>
 </UserControl>

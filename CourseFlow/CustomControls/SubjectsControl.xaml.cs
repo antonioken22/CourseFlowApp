@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace CourseFlow.CustomControls
 {
     /// <summary>
-    /// Interaction logic for SubjectControl.xaml
+    /// Interaction logic for SubjectsControl.xaml
     /// </summary>
-    public partial class SubjectControl : UserControl
+    public partial class SubjectsControl : UserControl
     {
-        public SubjectControl()
+        public SubjectsControl()
         {
             InitializeComponent();
         }

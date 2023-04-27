@@ -1,23 +1,26 @@
 ﻿using CourseFlow.Models;
 using CourseFlow.Repositories;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
+using System.Linq;
+using System.Collections.Generic;
+using System;
 
 namespace CourseFlow.ViewModels
 {
     public class CourseFlowsheetViewModel : ViewModelBase
     {
+        // Fields
         private ICourseRepository _courseRepository;
         private IAcademicYearRepository _academicYearRepository;
         private IYearLevelRepository _yearLevelRepository;
         private ISemesterRepository _semesterRepository;
         private ISubjectRepository _subjectRepository;
         private ISubjectRelationshipRepository _subjectRelationshipRepository;
+
+        // Properties
+        public CourseModel SelectedCourse { get; set; }
+        public AcademicYearModel SelectedAcademicYear { get; set; }
 
         public ObservableCollection<CourseModel> Courses { get; set; }
         public ObservableCollection<AcademicYearModel> AcademicYears { get; set; }
@@ -26,13 +29,19 @@ namespace CourseFlow.ViewModels
         public ObservableCollection<SubjectModel> Subjects { get; set; }
         public ObservableCollection<SubjectRelationshipModel> SubjectRelationships { get; set; }
 
+        // Nested collection: YearLevel -> Semester -> Subjects
+        public ObservableCollection<YearLevelSubjects> YearLevelSubjectsCollection { get; set; }
+
         public ICommand LoadCoursesCommand { get; }
         public ICommand LoadAcademicYearsCommand { get; }
         public ICommand LoadYearLevelsCommand { get; }
         public ICommand LoadSemestersCommand { get; }
         public ICommand LoadSubjectsCommand { get; }
         public ICommand LoadSubjectRelationshipsCommand { get; }
+        public ICommand LoadFlowsheetCommand { get; }
 
+
+        // Constructors
         public CourseFlowsheetViewModel()
         {
             _courseRepository = new CourseRepository();
@@ -55,8 +64,12 @@ namespace CourseFlow.ViewModels
             LoadSemestersCommand = new ViewModelCommand(param => LoadSemesters());
             LoadSubjectsCommand = new ViewModelCommand(param => LoadSubjects());
             LoadSubjectRelationshipsCommand = new ViewModelCommand(param => LoadSubjectRelationships());
+            LoadFlowsheetCommand = new ViewModelCommand(param => LoadFlowsheet());
+
+            YearLevelSubjectsCollection = new ObservableCollection<YearLevelSubjects>();
         }
 
+        // Methods
         private void LoadCourses()
         {
             var courses = _courseRepository.GetAll();
@@ -114,6 +127,74 @@ namespace CourseFlow.ViewModels
             foreach (var subjectRelationship in subjectRelationships)
             {
                 SubjectRelationships.Add(subjectRelationship);
+            }
+        }
+
+        private void LoadFlowsheet()
+        {
+            if (SelectedCourse == null || SelectedAcademicYear == null)
+            {
+                return;
+            }
+
+            // Retrieve subjects for the selected course and academic year
+            var subjects = _subjectRepository.GetByCourseAndAcademicYear(SelectedCourse.CourseID, SelectedAcademicYear.AcademicYearID);
+
+            // Group subjects by year level and semester
+            var subjectsByYearLevelAndSemester = subjects.GroupBy(s => new { s.YearLevelID, s.SemesterID });
+
+            // Clear the year level subjects collection
+            YearLevelSubjectsCollection.Clear();
+
+            // Add subjects to the corresponding year level and semester
+            foreach (var group in subjectsByYearLevelAndSemester)
+            {
+                var yearLevelID = group.Key.YearLevelID;
+                var semesterID = group.Key.SemesterID;
+
+                var yearLevel = YearLevels.FirstOrDefault(yl => yl.YearLevelID == yearLevelID);
+                var semester = Semesters.FirstOrDefault(s => s.SemesterID == semesterID);
+
+                if (yearLevel == null || semester == null) continue;
+
+                var yearLevelSubjects = YearLevelSubjectsCollection.FirstOrDefault(yls => yls.YearLevelID == yearLevelID);
+                if (yearLevelSubjects == null)
+                {
+                    yearLevelSubjects = new YearLevelSubjects(yearLevelID, yearLevel.YearLevel);
+                    YearLevelSubjectsCollection.Add(yearLevelSubjects);
+                }
+
+                yearLevelSubjects.AddSubjects(semesterID, semester.Semester, group.ToList());
+            }
+        }
+    }
+
+    public class YearLevelSubjects
+    {
+        public int YearLevelID { get; }
+        public string YearLevelName { get; }
+        public ObservableCollection<Tuple<string, ObservableCollection<SubjectModel>>> SemesterSubjects { get; }
+
+        public YearLevelSubjects(int yearLevelID, string yearLevelName)
+        {
+            YearLevelID = yearLevelID;
+            YearLevelName = yearLevelName;
+            SemesterSubjects = new ObservableCollection<Tuple<string, ObservableCollection<SubjectModel>>>();
+        }
+
+        public void AddSubjects(int semesterID, string semesterName, List<SubjectModel> subjects)
+        {
+            if (SemesterSubjects.Count < semesterID)
+            {
+                SemesterSubjects.Add(new Tuple<string, ObservableCollection<SubjectModel>>(semesterName, new ObservableCollection<SubjectModel>()));
+            }
+
+            var semesterSubjects = SemesterSubjects[semesterID - 1].Item2;
+            semesterSubjects.Clear();
+
+            foreach (var subject in subjects)
+            {
+                semesterSubjects.Add(subject);
             }
         }
     }

@@ -40,6 +40,7 @@
         </Style.Triggers>
     </Style>
     
+    
     <!--Menu Button Icon-->
     <Style x:Key="menuButtonIcon" TargetType="fa:ImageAwesome">
         <Setter Property="Foreground" Value="{Binding Path=Tag, RelativeSource={RelativeSource AncestorType=RadioButton}}"/>

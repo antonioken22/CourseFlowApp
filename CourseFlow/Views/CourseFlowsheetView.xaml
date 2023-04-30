@@ -7,10 +7,7 @@
              xmlns:vm="clr-namespace:CourseFlow.ViewModels"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    
-    <UserControl.DataContext>
-        <vm:CourseFlowsheetViewModel/>
-    </UserControl.DataContext>
+  
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -23,9 +20,16 @@
                       Margin="0,0,10,0"/>
             <ComboBox ItemsSource="{Binding AcademicYears}"
                       SelectedItem="{Binding SelectedAcademicYear}"
-                      DisplayMemberPath="AcademicYearName"
+                      DisplayMemberPath="AcademicYear"
                       Margin="0,0,10,0"/>
-            <Button Content="Load Flowsheet" Command="{Binding LoadFlowsheetCommand}"/>
+            <Button Content="Load Flowsheet" Command="{Binding LoadFlowsheetCommand}"
+                    MouseEnter="OnMouseEnter"
+                    MouseLeave="OnMouseLeave"/>
+            <TextBlock Text="TESTING"
+                       Foreground="{Binding TextColor}"
+                       />
+            
+            
         </StackPanel>
         <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
             <StackPanel Orientation="Vertical" Margin="10">

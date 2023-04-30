@@ -41,7 +41,7 @@ namespace CourseFlow.Repositories
                         {
                             courses.Add(new CourseModel
                             {
-                                CourseID = Convert.ToInt32(reader["CourseID"]),
+                                Id = Convert.ToInt32(reader["CourseID"]),
                                 CourseName = reader["CourseName"].ToString(),
                             });
                         }

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CourseFlow.Views"
         xmlns:viewModel="clr-namespace:CourseFlow.ViewModels" 
-        xmlns:customcontrols="clr-namespace:CourseFlow.CustomControls"
+        xmlns:customcontrols="clr-namespace:CourseFlow.CustomControls" 
         mc:Ignorable="d"
         Title="LoginView" 
         Width="350" Height="600" 
@@ -79,7 +79,7 @@
 
                     <Button x:Name="btnMinimize"
                             BorderThickness="0"
-                            Content="-"
+                            Content="−"
                             Foreground="White"
                             FontSize="12"
                             Cursor="Hand"
@@ -90,7 +90,7 @@
                                 <Setter Property="Background" Value="#FF4E0D0F"/>
                                 <Style.Triggers>
                                     <Trigger Property="IsMouseOver" Value="True" >
-                                        <Setter Property="Background" Value="#FF6F1B1E"/>  
+                                        <Setter Property="Background" Value="#FF6F1B1E"/>
                                     </Trigger>
                                 </Style.Triggers>
                             </Style>
@@ -99,21 +99,21 @@
                         <Button.Template>
                             <ControlTemplate TargetType="Button">
                                 <Border Width="18" Height="18"
-                                        CornerRadius="9"
+                                        CornerRadius="5"
                                         Background="{TemplateBinding Background}">
                                     <ContentPresenter  VerticalAlignment="Center"
                                                        HorizontalAlignment="Center"/>
                                 </Border>
                             </ControlTemplate>
                         </Button.Template>
-                        
+
                     </Button>
 
                     <Button x:Name="btnClose"
                             BorderThickness="0"
-                            Content="x"
+                            Content="✖"
                             Foreground="White"
-                            FontSize="12"
+                            FontSize="6"
                             Cursor="Hand"
                             Grid.Column="2"
                             Click="btnClose_Click">
@@ -132,7 +132,7 @@
                         <Button.Template>
                             <ControlTemplate TargetType="Button">
                                 <Border Width="18" Height="18"
-                                        CornerRadius="9"
+                                        CornerRadius="5"
                                         Background="{TemplateBinding Background}">
                                     <ContentPresenter  VerticalAlignment="Center"
                                                        HorizontalAlignment="Center"/>

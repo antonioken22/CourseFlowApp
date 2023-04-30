@@ -34,12 +34,16 @@ namespace CourseFlow.Repositories
             throw new NotImplementedException();
         }
 
-        public IEnumerable<UserModel> GetByAll()
+        public void Remove(int id)
         {
             throw new NotImplementedException();
         }
 
         public UserModel GetById(int id)
+        {
+            throw new NotImplementedException();
+        }
+        public IEnumerable<UserModel> GetByAll()
         {
             throw new NotImplementedException();
         }
@@ -70,11 +74,6 @@ namespace CourseFlow.Repositories
                 }
             }
             return user;
-        }
-
-        public void Remove(int id)
-        {
-            throw new NotImplementedException();
         }
     }
 }

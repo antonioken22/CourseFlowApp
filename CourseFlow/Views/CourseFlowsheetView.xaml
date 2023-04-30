@@ -13,6 +13,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
+        
         <StackPanel Orientation="Horizontal" Margin="10">
             <ComboBox ItemsSource="{Binding Courses}"
                       SelectedItem="{Binding SelectedCourse}"
@@ -22,15 +23,9 @@
                       SelectedItem="{Binding SelectedAcademicYear}"
                       DisplayMemberPath="AcademicYear"
                       Margin="0,0,10,0"/>
-            <Button Content="Load Flowsheet" Command="{Binding LoadFlowsheetCommand}"
-                    MouseEnter="OnMouseEnter"
-                    MouseLeave="OnMouseLeave"/>
-            <TextBlock Text="TESTING"
-                       Foreground="{Binding TextColor}"
-                       />
-            
-            
+            <Button Content="Load Flowsheet" Command="{Binding LoadFlowsheetCommand}"/>
         </StackPanel>
+        
         <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
             <StackPanel Orientation="Vertical" Margin="10">
                 <ItemsControl ItemsSource="{Binding YearLevels}">

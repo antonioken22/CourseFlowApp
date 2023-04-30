@@ -60,7 +60,7 @@ namespace CourseFlow.ViewModels
         public ICommand OnMouseEnter { get; }
         public ICommand OnMouseLeave { get; }
 
-        // Control Componens
+        // Control Components
         private Brush textColor;
         public Brush TextColor
         {
@@ -157,6 +157,7 @@ namespace CourseFlow.ViewModels
             {
                 YearLevels.Add(yearLevel);
             }
+            OnPropertyChanged(nameof(LoadYearLevels));
         }
 
         private void LoadSemesters()
@@ -167,6 +168,7 @@ namespace CourseFlow.ViewModels
             {
                 Semesters.Add(semester);
             }
+            OnPropertyChanged(nameof(LoadSemesters));
         }
 
         private void LoadSubjects()
@@ -177,6 +179,7 @@ namespace CourseFlow.ViewModels
             {
                 Subjects.Add(subject);
             }
+            OnPropertyChanged(nameof(LoadSubjects));
         }
 
         private void LoadSubjectRelationships()
@@ -187,6 +190,7 @@ namespace CourseFlow.ViewModels
             {
                 SubjectRelationships.Add(subjectRelationship);
             }
+            OnPropertyChanged(nameof(LoadSubjectRelationships));
         }
 
         private void LoadFlowsheet()
@@ -225,6 +229,7 @@ namespace CourseFlow.ViewModels
 
                 yearLevelSubjects.AddSubjects(semesterID, semester.Semester, group.ToList());
             }
+            OnPropertyChanged(nameof(LoadFlowsheet));
         }
     }
 

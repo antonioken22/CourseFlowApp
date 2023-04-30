@@ -21,13 +21,12 @@ namespace CourseFlow.Repositories
         {
             throw new NotImplementedException();
         }
-
-        public IEnumerable<SubjectModel> GetAll()
+        public SubjectModel GetById(int id)
         {
             throw new NotImplementedException();
         }
 
-        public SubjectModel GetById(int id)
+        public IEnumerable<SubjectModel> GetAll()
         {
             throw new NotImplementedException();
         }

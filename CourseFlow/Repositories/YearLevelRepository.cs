@@ -15,18 +15,18 @@ namespace CourseFlow.Repositories
         {
             throw new NotImplementedException();
         }
-
-        public IEnumerable<YearLevelModel> GetAll()
+        public void Remove(int id)
         {
             throw new NotImplementedException();
         }
+
 
         public YearLevelModel GetById(int id)
         {
             throw new NotImplementedException();
         }
 
-        public void Remove(int id)
+        public IEnumerable<YearLevelModel> GetAll()
         {
             throw new NotImplementedException();
         }

@@ -280,7 +280,7 @@
                             </Ellipse>
 
                             <Button Style="{StaticResource iconButton}"
-                                    Tag="{StaticResource color3}">
+                                    Tag="{StaticResource color4}">
                                 <fa:ImageAwesome Icon="ClockOutline" Style="{StaticResource iconButtonIcon}"/>
                             </Button>
                             <Button Style="{StaticResource iconButton}"
@@ -288,7 +288,7 @@
                                 <fa:ImageAwesome Icon="Envelope" Style="{StaticResource iconButtonIcon}"/>
                             </Button>
                             <Button Style="{StaticResource iconButton}"
-                                    Tag="{StaticResource color5}">
+                                    Tag="{StaticResource color4}">
                                 <fa:ImageAwesome Icon="Bell" Style="{StaticResource iconButtonIcon}"/>
                             </Button>
 

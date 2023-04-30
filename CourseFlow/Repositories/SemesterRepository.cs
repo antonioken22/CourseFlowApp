@@ -16,7 +16,7 @@ namespace CourseFlow.Repositories
             throw new NotImplementedException();
         }
 
-        public IEnumerable<SemesterModel> GetAll()
+        public void Remove(int id)
         {
             throw new NotImplementedException();
         }
@@ -26,7 +26,7 @@ namespace CourseFlow.Repositories
             throw new NotImplementedException();
         }
 
-        public void Remove(int id)
+        public IEnumerable<SemesterModel> GetAll()
         {
             throw new NotImplementedException();
         }

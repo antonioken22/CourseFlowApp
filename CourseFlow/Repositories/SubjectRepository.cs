@@ -64,18 +64,25 @@ namespace CourseFlow.Repositories
             return subjects;
         }
 
-        public ObservableCollection<SubjectModel> GetSubjectsByYearLevelSemesterAndCourse(YearLevelModel yearLevel, SemesterModel semester, CourseModel course, AcademicYearModel academicYear)
+        public List<SubjectModel> GetSubjectsByYearLevelSemesterAndCourse(YearLevelModel yearLevel, SemesterModel semester, CourseModel course, AcademicYearModel academicYear)
         {
-            var subjects = new ObservableCollection<SubjectModel>();
+            var subjects = new List<SubjectModel>();
             using (var connection = GetConnection())
             {
                 connection.Open();
-                using (var command = new OleDbCommand("SELECT * FROM Subjects WHERE CourseID = @courseID AND AcademicYearID = @academicYearID AND YearLevelID = @yearLevelID AND SemesterID = @semesterID", connection))
+                string baseQuery = "SELECT * FROM Subjects WHERE CourseID = @courseID AND AcademicYearID = @academicYearID AND YearLevelID = @yearLevelID";
+                string semesterFilter = semester != null ? " AND SemesterID = @semesterID" : "";
+                string query = baseQuery + semesterFilter;
+
+                using (var command = new OleDbCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@courseID", course.Id);
                     command.Parameters.AddWithValue("@academicYearID", academicYear.Id);
                     command.Parameters.AddWithValue("@yearLevelID", yearLevel.Id);
-                    command.Parameters.AddWithValue("@semesterID", semester.Id);
+                    if (semester != null)
+                    {
+                        command.Parameters.AddWithValue("@semesterID", semester.Id);
+                    }
 
                     using (var reader = command.ExecuteReader())
                     {
@@ -98,6 +105,7 @@ namespace CourseFlow.Repositories
 
             return subjects;
         }
+
 
         public List<SubjectModel> GetSubjectsByCourseAndAcademicYear(CourseModel course, AcademicYearModel academicYear)
         {

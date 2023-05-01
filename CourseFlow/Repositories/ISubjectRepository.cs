@@ -12,7 +12,7 @@ namespace CourseFlow.Repositories
         SubjectModel GetById(int id);
         IEnumerable<SubjectModel> GetAll();
         IEnumerable<SubjectModel> GetByCourseAndAcademicYear(int courseID, int academicYearID);
-        public ObservableCollection<SubjectModel> GetSubjectsByYearLevelSemesterAndCourse(YearLevelModel yearLevel, SemesterModel semester, CourseModel course, AcademicYearModel academicYear);
+        public List<SubjectModel> GetSubjectsByYearLevelSemesterAndCourse(YearLevelModel yearLevel, SemesterModel semester, CourseModel course, AcademicYearModel academicYear);
         public List<SubjectModel> GetSubjectsByCourseAndAcademicYear(CourseModel course, AcademicYearModel academicYear);
     }
 }

@@ -29,7 +29,9 @@
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <StackPanel>
+                        <!--YearLevels-->
                         <TextBlock Text="{Binding YearLevel.YearLevel}" FontWeight="Bold" Margin="10"/>
+                        <!--Semesters-->
                         <ItemsControl ItemsSource="{Binding Semesters}">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
@@ -52,5 +54,5 @@
             </ItemsControl.ItemsPanel>
         </ItemsControl>
     </Grid>
-
+    
 </UserControl>

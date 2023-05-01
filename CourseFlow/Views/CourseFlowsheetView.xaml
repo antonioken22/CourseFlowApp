@@ -6,7 +6,6 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
 
-
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -15,36 +14,65 @@
 
         <StackPanel Orientation="Horizontal" Margin="10">
             <ComboBox ItemsSource="{Binding Courses}"
-                SelectedItem="{Binding SelectedCourse}"
-                DisplayMemberPath="CourseName"
-                Margin="0,0,10,0"/>
+                      SelectedItem="{Binding SelectedCourse}"
+                      DisplayMemberPath="CourseName"
+                      Margin="0,0,10,0"/>
             <ComboBox ItemsSource="{Binding AcademicYears}"
-                SelectedItem="{Binding SelectedAcademicYear}"
-                DisplayMemberPath="AcademicYear"
-                Margin="0,0,10,0"/>
+                      SelectedItem="{Binding SelectedAcademicYear}"
+                      DisplayMemberPath="AcademicYear"
+                      Margin="0,0,10,0"/>
             <Button Content="Load Flowsheet" Command="{Binding LoadFlowsheetCommand}"/>
         </StackPanel>
 
         <ItemsControl ItemsSource="{Binding FlowsheetData}" Grid.Row="1">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <StackPanel>
-                        <!--YearLevels-->
-                        <TextBlock Text="{Binding YearLevel.YearLevel}" FontWeight="Bold" Margin="10"/>
-                        <!--Semesters-->
-                        <ItemsControl ItemsSource="{Binding Semesters}">
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding Semester.Semester}" FontWeight="Bold" Margin="10"/>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                            <ItemsControl.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <UniformGrid Rows="1"/>
-                                </ItemsPanelTemplate>
-                            </ItemsControl.ItemsPanel>
-                        </ItemsControl>
-                    </StackPanel>
+                    <Border BorderBrush="Maroon" BorderThickness="1" Margin="2.5" Padding="2.5">
+                        <StackPanel>
+                            <!--YearLevels-->
+                            <TextBlock Text="{Binding YearLevel.YearLevel}" FontWeight="Bold" Margin="2.5" HorizontalAlignment="Center"/>
+                            <!--Semesters-->
+                            <ItemsControl ItemsSource="{Binding Semesters}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border BorderBrush="Maroon" BorderThickness="1" Margin="2.5" Padding="2.5">
+                                            <StackPanel>
+                                                <TextBlock Text="{Binding Semester.Semester}" FontWeight="Bold" Margin="10" HorizontalAlignment="Center"/>
+                                                <!--Subjects-->
+                                                <ItemsControl ItemsSource="{Binding Subjects}">
+                                                    <ItemsControl.ItemTemplate>
+                                                        <DataTemplate>
+                                                            <Border x:Name="SubjectBorder" BorderBrush="Maroon" BorderThickness="1" Margin="2.5" Padding="2.5" CornerRadius="2.5">
+                                                                <StackPanel>
+                                                                    <TextBlock Text="{Binding SubjectName}" FontSize="12" Margin="5" HorizontalAlignment="Left"/>
+                                                                    <TextBlock Text="{Binding SubjectCode}" FontStyle="Italic" FontSize="10" Margin="5" HorizontalAlignment="Left"/>
+                                                                </StackPanel>
+                                                                <Border.Style>
+                                                                    <Style TargetType="Border">
+                                                                        <Setter Property="Background" Value="Transparent"/>
+                                                                        <Style.Triggers>
+                                                                            <Trigger Property="IsMouseOver" Value="True">
+                                                                                <Setter Property="Background" Value="#EEE"/>
+                                                                            </Trigger>
+                                                                        </Style.Triggers>
+                                                                    </Style>
+                                                                </Border.Style>
+                                                            </Border>
+                                                        </DataTemplate>
+                                                    </ItemsControl.ItemTemplate>
+                                                </ItemsControl>
+                                            </StackPanel>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <UniformGrid Rows="1"/>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                            </ItemsControl>
+                        </StackPanel>
+                    </Border>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
             <ItemsControl.ItemsPanel>
@@ -53,6 +81,7 @@
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
         </ItemsControl>
+
     </Grid>
     
 </UserControl>

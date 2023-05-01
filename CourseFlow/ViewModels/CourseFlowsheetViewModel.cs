@@ -122,9 +122,7 @@ namespace CourseFlow.ViewModels
         private void LoadYearLevels()
         {
             var subjectsByCourseAndAcademicYear = _subjectRepository.GetSubjectsByCourseAndAcademicYear(SelectedCourse, SelectedAcademicYear);
-            var yearLevelsInSubjects = subjectsByCourseAndAcademicYear.Select(s => s.YearLevelID).Distinct().ToList();
-
-            yearLevelsInSubjects = yearLevelsInSubjects.OrderBy(id => id).ToList();
+            var yearLevelsInSubjects = subjectsByCourseAndAcademicYear.Select(s => s.YearLevelID).Distinct().OrderBy(id => id).ToList();
 
             foreach (var yearLevelID in yearLevelsInSubjects)
             {
@@ -140,7 +138,7 @@ namespace CourseFlow.ViewModels
         private void LoadSemesters(YearLevelData yearLevelData)
         {
             var subjectsByYearLevelCourseAndAcademicYear = _subjectRepository.GetSubjectsByYearLevelSemesterAndCourse(yearLevelData.YearLevel, null, SelectedCourse, SelectedAcademicYear);
-            var semesterIdsInSubjects = subjectsByYearLevelCourseAndAcademicYear.Select(s => s.SemesterID).Distinct().ToList();
+            var semesterIdsInSubjects = subjectsByYearLevelCourseAndAcademicYear.Select(s => s.SemesterID).Distinct().OrderBy(id => id).ToList();
 
             var semesters = _semesterRepository.GetAll().Where(s => semesterIdsInSubjects.Contains(s.Id));
             foreach (var semester in semesters)
@@ -160,14 +158,8 @@ namespace CourseFlow.ViewModels
 
         private void LoadSubjects()
         {
-            var subjects = _subjectRepository.GetAll();
-            Subjects.Clear();
-            foreach (var subject in subjects)
-            {
-                Subjects.Add(subject);
-            }
-            OnPropertyChanged(nameof(Subjects));
         }
+
 
         private void LoadSubjectRelationships()
         {

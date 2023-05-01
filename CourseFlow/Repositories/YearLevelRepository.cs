@@ -24,7 +24,30 @@ namespace CourseFlow.Repositories
 
         public YearLevelModel GetById(int id)
         {
-            throw new NotImplementedException();
+            using (var connection = new OleDbConnection(_connectionString))
+            {
+                connection.Open();
+
+                var query = "SELECT * FROM YearLevels WHERE YearLevelID = @YearLevelID";
+                var command = new OleDbCommand(query, connection);
+                command.Parameters.AddWithValue("@YearLevelID", id);
+
+                var reader = command.ExecuteReader();
+
+                if (reader.Read())
+                {
+                    var yearLevel = new YearLevelModel
+                    {
+                        Id = (int)reader["YearLevelID"],
+                        YearLevel = reader["YearLevel"].ToString()
+                    };
+                    return yearLevel;
+                }
+                else
+                {
+                    return null;
+                }
+            }
         }
 
         public IEnumerable<YearLevelModel> GetAll()

@@ -1,14 +1,8 @@
 ﻿using CourseFlow.Models;
 using CourseFlow.Repositories;
 using System.Collections.ObjectModel;
-using System.Windows.Input;
 using System.Linq;
-using System.Collections.Generic;
-using System;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Media;
+using System.Windows.Input;
 
 namespace CourseFlow.ViewModels
 {
@@ -21,19 +15,13 @@ namespace CourseFlow.ViewModels
         private ISemesterRepository _semesterRepository;
         private ISubjectRepository _subjectRepository;
         private ISubjectRelationshipRepository _subjectRelationshipRepository;
+        private IRelationshipTypeRepository _relationshipTypeRepository;
 
         // Properties
         public CourseModel SelectedCourse { get; set; }
-
-        private AcademicYearModel selectedAcademicYear;
-        public AcademicYearModel SelectedAcademicYear
-        {
-            get => selectedAcademicYear;
-            set
-            {
-                selectedAcademicYear = value;
-            }
-        }
+        public AcademicYearModel SelectedAcademicYear { get; set; }
+        public YearLevelModel LoadedYearLevel { get; set; }
+        public SemesterModel LoadedSemesterModel { get; set; }
 
         public ObservableCollection<CourseModel> Courses { get; set; }
         public ObservableCollection<AcademicYearModel> AcademicYears { get; set; }
@@ -41,9 +29,20 @@ namespace CourseFlow.ViewModels
         public ObservableCollection<SemesterModel> Semesters { get; set; }
         public ObservableCollection<SubjectModel> Subjects { get; set; }
         public ObservableCollection<SubjectRelationshipModel> SubjectRelationships { get; set; }
+        public ObservableCollection<RelationshipTypeModel> RelationshipTypes { get; set; }
 
-        // Nested collection: YearLevel -> Semester -> Subjects
-        public ObservableCollection<YearLevelSubjects> YearLevelSubjectsCollection { get; set; }
+        public ObservableCollection<YearLevelData> FlowsheetData { get; set; }
+        public class YearLevelData
+        {
+            public YearLevelModel YearLevel { get; set; }
+            public ObservableCollection<SemesterData> Semesters { get; set; }
+        }
+        public class SemesterData
+        {
+            public SemesterModel Semester { get; set; }
+            public ObservableCollection<SubjectModel> Subjects { get; set; }
+        }
+
 
         public ICommand LoadCoursesCommand { get; }
         public ICommand LoadAcademicYearsCommand { get; }
@@ -51,31 +50,10 @@ namespace CourseFlow.ViewModels
         public ICommand LoadSemestersCommand { get; }
         public ICommand LoadSubjectsCommand { get; }
         public ICommand LoadSubjectRelationshipsCommand { get; }
+        public ICommand LoadRelationshipTypesCommand { get; }
+
         public ICommand LoadFlowsheetCommand { get; }
-
-      
-        // Events
-
         public ICommand OnPageLoadCommand { get; }
-        public ICommand OnMouseEnter { get; }
-        public ICommand OnMouseLeave { get; }
-
-        // Control Components
-        private Brush textColor;
-        public Brush TextColor
-        {
-            get => textColor;
-            set
-            {
-                if (value is not null)
-                {
-                    textColor = value;
-                    OnPropertyChanged(nameof(TextColor));
-                }
-                else textColor = null;
-
-            }
-        }
 
         // Constructors
         public CourseFlowsheetViewModel()
@@ -86,6 +64,7 @@ namespace CourseFlow.ViewModels
             _semesterRepository = new SemesterRepository();
             _subjectRepository = new SubjectRepository();
             _subjectRelationshipRepository = new SubjectRelationshipRepository();
+            _relationshipTypeRepository = new RelationshipTypeRepository();
 
             Courses = new ObservableCollection<CourseModel>();
             AcademicYears = new ObservableCollection<AcademicYearModel>();
@@ -93,6 +72,7 @@ namespace CourseFlow.ViewModels
             Semesters = new ObservableCollection<SemesterModel>();
             Subjects = new ObservableCollection<SubjectModel>();
             SubjectRelationships = new ObservableCollection<SubjectRelationshipModel>();
+            RelationshipTypes = new ObservableCollection<RelationshipTypeModel>();
 
             LoadCoursesCommand = new ViewModelCommand(param => LoadCourses());
             LoadAcademicYearsCommand = new ViewModelCommand(param => LoadAcademicYears());
@@ -100,25 +80,11 @@ namespace CourseFlow.ViewModels
             LoadSemestersCommand = new ViewModelCommand(param => LoadSemesters());
             LoadSubjectsCommand = new ViewModelCommand(param => LoadSubjects());
             LoadSubjectRelationshipsCommand = new ViewModelCommand(param => LoadSubjectRelationships());
+            LoadRelationshipTypesCommand = new ViewModelCommand(param => LoadRelationshipTypes());
             LoadFlowsheetCommand = new ViewModelCommand(param => LoadFlowsheet());
 
-            YearLevelSubjectsCollection = new ObservableCollection<YearLevelSubjects>();
-
+            FlowsheetData = new ObservableCollection<YearLevelData>();
             OnPageLoadCommand = new ViewModelCommand(param => OnPageLoad());
-            OnMouseEnter = new ViewModelCommand(param => OnMouseIn());
-            OnMouseLeave = new ViewModelCommand(param => OnMouseOut());
-        }
-
-        // Methods
-
-        private void OnMouseIn()
-        {
-            TextColor = Brushes.Red;
-        }
-
-        private void OnMouseOut()
-        {
-            TextColor = Brushes.White;
         }
 
         private void OnPageLoad()
@@ -151,25 +117,40 @@ namespace CourseFlow.ViewModels
 
         private void LoadYearLevels()
         {
-            var yearLevels = _yearLevelRepository.GetAll();
-            YearLevels.Clear();
-            foreach (var yearLevel in yearLevels)
+            var subjectsByCourseAndAcademicYear = _subjectRepository.GetSubjectsByCourseAndAcademicYear(SelectedCourse, SelectedAcademicYear);
+            var yearLevelsInSubjects = subjectsByCourseAndAcademicYear.Select(s => s.YearLevelID).Distinct().ToList();
+
+            foreach (var yearLevelID in yearLevelsInSubjects)
             {
-                YearLevels.Add(yearLevel);
+                var yearLevel = _yearLevelRepository.GetById(yearLevelID);
+                var yearLevelData = new YearLevelData { YearLevel = yearLevel };
+                yearLevelData.Semesters = new ObservableCollection<SemesterData>();
+
+                var semesters = _semesterRepository.GetAll();
+
+                foreach (var semester in semesters)
+                {
+                    var semesterData = new SemesterData { Semester = semester };
+                    semesterData.Subjects = new ObservableCollection<SubjectModel>();
+
+                    var subjects = _subjectRepository.GetSubjectsByYearLevelSemesterAndCourse(yearLevel, semester, SelectedCourse, SelectedAcademicYear);
+                    foreach (var subject in subjects)
+                    {
+                        semesterData.Subjects.Add(subject);
+                    }
+
+                    yearLevelData.Semesters.Add(semesterData);
+                }
+
+                FlowsheetData.Add(yearLevelData);
             }
-            OnPropertyChanged(nameof(LoadYearLevels));
         }
 
         private void LoadSemesters()
         {
-            var semesters = _semesterRepository.GetAll();
-            Semesters.Clear();
-            foreach (var semester in semesters)
-            {
-                Semesters.Add(semester);
-            }
-            OnPropertyChanged(nameof(LoadSemesters));
+
         }
+
 
         private void LoadSubjects()
         {
@@ -179,7 +160,7 @@ namespace CourseFlow.ViewModels
             {
                 Subjects.Add(subject);
             }
-            OnPropertyChanged(nameof(LoadSubjects));
+            OnPropertyChanged(nameof(Subjects));
         }
 
         private void LoadSubjectRelationships()
@@ -190,8 +171,20 @@ namespace CourseFlow.ViewModels
             {
                 SubjectRelationships.Add(subjectRelationship);
             }
-            OnPropertyChanged(nameof(LoadSubjectRelationships));
+            OnPropertyChanged(nameof(SubjectRelationships));
         }
+
+        private void LoadRelationshipTypes()
+        {
+            var relationshipTypes = _relationshipTypeRepository.GetAll();
+            RelationshipTypes.Clear();
+            foreach (var relationshipType in relationshipTypes)
+            {
+                RelationshipTypes.Add(relationshipType);
+            }
+            OnPropertyChanged(nameof(RelationshipTypes));
+        }
+
 
         private void LoadFlowsheet()
         {
@@ -200,66 +193,10 @@ namespace CourseFlow.ViewModels
                 return;
             }
 
-            // Retrieve subjects for the selected course and academic year
-            var subjects = _subjectRepository.GetByCourseAndAcademicYear(SelectedCourse.Id, SelectedAcademicYear.Id);
+            FlowsheetData.Clear();
+            LoadYearLevels();
 
-            // Group subjects by year level and semester
-            var subjectsByYearLevelAndSemester = subjects.GroupBy(s => new { s.YearLevelID, s.SemesterID });
-
-            // Clear the year level subjects collection
-            YearLevelSubjectsCollection.Clear();
-
-            // Add subjects to the corresponding year level and semester
-            foreach (var group in subjectsByYearLevelAndSemester)
-            {
-                var yearLevelID = group.Key.YearLevelID;
-                var semesterID = group.Key.SemesterID;
-
-                var yearLevel = YearLevels.FirstOrDefault(yl => yl.Id == yearLevelID);
-                var semester = Semesters.FirstOrDefault(s => s.Id == semesterID);
-
-                if (yearLevel == null || semester == null) continue;
-
-                var yearLevelSubjects = YearLevelSubjectsCollection.FirstOrDefault(yls => yls.YearLevelID == yearLevelID);
-                if (yearLevelSubjects == null)
-                {
-                    yearLevelSubjects = new YearLevelSubjects(yearLevelID, yearLevel.YearLevel);
-                    YearLevelSubjectsCollection.Add(yearLevelSubjects);
-                }
-
-                yearLevelSubjects.AddSubjects(semesterID, semester.Semester, group.ToList());
-            }
-            OnPropertyChanged(nameof(LoadFlowsheet));
-        }
-    }
-
-    public class YearLevelSubjects
-    {
-        public int YearLevelID { get; }
-        public string YearLevelName { get; }
-        public ObservableCollection<Tuple<string, ObservableCollection<SubjectModel>>> SemesterSubjects { get; }
-
-        public YearLevelSubjects(int yearLevelID, string yearLevelName)
-        {
-            YearLevelID = yearLevelID;
-            YearLevelName = yearLevelName;
-            SemesterSubjects = new ObservableCollection<Tuple<string, ObservableCollection<SubjectModel>>>();
-        }
-
-        public void AddSubjects(int semesterID, string semesterName, List<SubjectModel> subjects)
-        {
-            if (SemesterSubjects.Count < semesterID)
-            {
-                SemesterSubjects.Add(new Tuple<string, ObservableCollection<SubjectModel>>(semesterName, new ObservableCollection<SubjectModel>()));
-            }
-
-            var semesterSubjects = SemesterSubjects[semesterID - 1].Item2;
-            semesterSubjects.Clear();
-
-            foreach (var subject in subjects)
-            {
-                semesterSubjects.Add(subject);
-            }
+            OnPropertyChanged(nameof(FlowsheetData));
         }
     }
 }

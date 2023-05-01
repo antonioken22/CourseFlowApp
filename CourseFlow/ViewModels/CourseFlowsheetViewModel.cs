@@ -124,6 +124,8 @@ namespace CourseFlow.ViewModels
             var subjectsByCourseAndAcademicYear = _subjectRepository.GetSubjectsByCourseAndAcademicYear(SelectedCourse, SelectedAcademicYear);
             var yearLevelsInSubjects = subjectsByCourseAndAcademicYear.Select(s => s.YearLevelID).Distinct().ToList();
 
+            yearLevelsInSubjects = yearLevelsInSubjects.OrderBy(id => id).ToList();
+
             foreach (var yearLevelID in yearLevelsInSubjects)
             {
                 var yearLevel = _yearLevelRepository.GetById(yearLevelID);
@@ -134,7 +136,6 @@ namespace CourseFlow.ViewModels
                 FlowsheetData.Add(yearLevelData);
             }
         }
-
 
         private void LoadSemesters(YearLevelData yearLevelData)
         {

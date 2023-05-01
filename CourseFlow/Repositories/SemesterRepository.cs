@@ -1,6 +1,7 @@
 ﻿using CourseFlow.Models;
 using System;
 using System.Collections.Generic;
+using System.Data.OleDb;
 
 namespace CourseFlow.Repositories
 {
@@ -28,7 +29,27 @@ namespace CourseFlow.Repositories
 
         public IEnumerable<SemesterModel> GetAll()
         {
-            throw new NotImplementedException();
+            var semesters = new List<SemesterModel>();
+            using (var connection = GetConnection())
+            {
+                connection.Open();
+                using (var command = new OleDbCommand("SELECT * FROM Semesters", connection))
+                {
+                    using (var reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            semesters.Add(new SemesterModel
+                            {
+                                Id = Convert.ToInt32(reader["SemesterID"]),
+                                Semester = reader["Semester"].ToString(),
+                            });
+                        }
+                    }
+                }
+            }
+
+            return semesters;
         }
     }
 }

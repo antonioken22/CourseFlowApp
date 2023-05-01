@@ -4,6 +4,11 @@
     {
         public int SubjectID { get; set; }
         public int RelatedSubjectID { get; set; }
-        public string RelationshipType { get; set; } // Pre-requisite, Co-requisite, Post-requisite
+        public int RelationshipTypeID { get; set; }
+
+        // Navigation properties
+        public SubjectModel Subject { get; set; }
+        public SubjectModel RelatedSubject { get; set; }
+        public RelationshipTypeModel RelationshipType { get; set; }
     }
 }

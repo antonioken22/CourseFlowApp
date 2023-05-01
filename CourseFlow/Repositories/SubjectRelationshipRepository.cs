@@ -38,9 +38,8 @@ namespace CourseFlow.Repositories
             using (var connection = GetConnection())
             {
                 connection.Open();
-                using (var command = new OleDbCommand("SELECT * FROM SubjectRelationships WHERE SubjectID = @subjectID", connection))
+                using (var command = new OleDbCommand("SELECT * FROM SubjectRelationships", connection))
                 {
-                    command.Parameters.AddWithValue("@subjectID", subjectID);
                     using (var reader = command.ExecuteReader())
                     {
                         while (reader.Read())
@@ -50,7 +49,7 @@ namespace CourseFlow.Repositories
                                 Id = Convert.ToInt32(reader["RelationshipID"]),
                                 SubjectID = Convert.ToInt32(reader["SubjectID"]),
                                 RelatedSubjectID = Convert.ToInt32(reader["RelatedSubjectID"]),
-                                RelationshipType = reader["RelationshipType"].ToString(),
+                                RelationshipTypeID = Convert.ToInt32(reader["RelationshipTypeID"]),
                             });
                         }
                     }

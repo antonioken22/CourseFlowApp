@@ -20,8 +20,6 @@ namespace CourseFlow.ViewModels
         // Properties
         public CourseModel SelectedCourse { get; set; }
         public AcademicYearModel SelectedAcademicYear { get; set; }
-        public YearLevelModel LoadedYearLevel { get; set; }
-        public SemesterModel LoadedSemesterModel { get; set; }
 
         public ObservableCollection<CourseModel> Courses { get; set; }
         public ObservableCollection<AcademicYearModel> AcademicYears { get; set; }
@@ -32,6 +30,8 @@ namespace CourseFlow.ViewModels
         public ObservableCollection<RelationshipTypeModel> RelationshipTypes { get; set; }
 
         public ObservableCollection<YearLevelData> FlowsheetData { get; set; }
+
+        // Nested classes for FlowsheetData
         public class YearLevelData
         {
             public YearLevelData()
@@ -48,17 +48,11 @@ namespace CourseFlow.ViewModels
             public ObservableCollection<SubjectModel> Subjects { get; set; }
         }
 
-
-        public ICommand LoadCoursesCommand { get; }
-        public ICommand LoadAcademicYearsCommand { get; }
-        public ICommand LoadYearLevelsCommand { get; }
-        public ICommand LoadSemestersCommand { get; }
-        public ICommand LoadSubjectsCommand { get; }
-        public ICommand LoadSubjectRelationshipsCommand { get; }
-        public ICommand LoadRelationshipTypesCommand { get; }
-
+        // ICommand properties
         public ICommand LoadFlowsheetCommand { get; }
         public ICommand OnPageLoadCommand { get; }
+        public ICommand SubjectMouseEnterCommand { get; }
+        public ICommand SubjectMouseLeaveCommand { get; }
 
         // Constructors
         public CourseFlowsheetViewModel()
@@ -79,16 +73,13 @@ namespace CourseFlow.ViewModels
             SubjectRelationships = new ObservableCollection<SubjectRelationshipModel>();
             RelationshipTypes = new ObservableCollection<RelationshipTypeModel>();
 
-            LoadCoursesCommand = new ViewModelCommand(param => LoadCourses());
-            LoadAcademicYearsCommand = new ViewModelCommand(param => LoadAcademicYears());
-            LoadYearLevelsCommand = new ViewModelCommand(param => LoadYearLevels());
-            LoadSubjectsCommand = new ViewModelCommand(param => LoadSubjects());
-            LoadSubjectRelationshipsCommand = new ViewModelCommand(param => LoadSubjectRelationships());
-            LoadRelationshipTypesCommand = new ViewModelCommand(param => LoadRelationshipTypes());
             LoadFlowsheetCommand = new ViewModelCommand(param => LoadFlowsheet());
 
             FlowsheetData = new ObservableCollection<YearLevelData>();
             OnPageLoadCommand = new ViewModelCommand(param => OnPageLoad());
+
+            SubjectMouseEnterCommand = new ViewModelCommand(param => SubjectMouseEnter((SubjectModel)param));
+            SubjectMouseLeaveCommand = new ViewModelCommand(param => SubjectMouseLeave((SubjectModel)param));
         }
 
         private void OnPageLoad()
@@ -156,34 +147,6 @@ namespace CourseFlow.ViewModels
             }
         }
 
-        private void LoadSubjects()
-        {
-        }
-
-
-        private void LoadSubjectRelationships()
-        {
-            var subjectRelationships = _subjectRelationshipRepository.GetAll();
-            SubjectRelationships.Clear();
-            foreach (var subjectRelationship in subjectRelationships)
-            {
-                SubjectRelationships.Add(subjectRelationship);
-            }
-            OnPropertyChanged(nameof(SubjectRelationships));
-        }
-
-        private void LoadRelationshipTypes()
-        {
-            var relationshipTypes = _relationshipTypeRepository.GetAll();
-            RelationshipTypes.Clear();
-            foreach (var relationshipType in relationshipTypes)
-            {
-                RelationshipTypes.Add(relationshipType);
-            }
-            OnPropertyChanged(nameof(RelationshipTypes));
-        }
-
-
         private void LoadFlowsheet()
         {
             if (SelectedCourse == null || SelectedAcademicYear == null)
@@ -195,6 +158,66 @@ namespace CourseFlow.ViewModels
             LoadYearLevels();
 
             OnPropertyChanged(nameof(FlowsheetData));
+        }
+
+        private void SubjectMouseEnter(SubjectModel subject)
+        {
+            var relatedSubjectRelationships = _subjectRelationshipRepository.GetRelatedSubjects(subject);
+            foreach (var relatedSubjectRelationship in relatedSubjectRelationships)
+            {
+                var relatedSubjectId = relatedSubjectRelationship.SubjectID == subject.Id ? relatedSubjectRelationship.RelatedSubjectID : relatedSubjectRelationship.SubjectID;
+                var relatedSubject = _subjectRepository.GetById(relatedSubjectId);
+                relatedSubject.BackgroundColor = GetBackgroundColorByRelationshipType(relatedSubjectRelationship.RelationshipTypeID);
+            }
+        }
+
+        private void SubjectMouseLeave(SubjectModel subject)
+        {
+            var relatedSubjectRelationships = _subjectRelationshipRepository.GetRelatedSubjects(subject);
+            foreach (var relatedSubjectRelationship in relatedSubjectRelationships)
+            {
+                var relatedSubjectId = relatedSubjectRelationship.SubjectID == subject.Id ? relatedSubjectRelationship.RelatedSubjectID : relatedSubjectRelationship.SubjectID;
+                var relatedSubject = _subjectRepository.GetById(relatedSubjectId);
+                relatedSubject.BackgroundColor = "Transparent";
+            }
+        }
+
+
+        private string GetBackgroundColorByRelationshipType(int relationshipTypeID)
+        {
+            switch (relationshipTypeID)
+            {
+                case 1: // Pre-requisite
+                    return "Yellow";
+                case 2: // Co-requisite
+                    return "Green";
+                case 3: // Post-requisite
+                    return "Blue";
+                default:
+                    return "Transparent";
+            }
+        }
+
+        public void HighlightRelatedSubjects(SubjectModel subject)
+        {
+            var relatedSubjectRelationships = _subjectRelationshipRepository.GetRelatedSubjects(subject);
+            foreach (var relatedSubjectRelationship in relatedSubjectRelationships)
+            {
+                var relatedSubjectId = relatedSubjectRelationship.SubjectID == subject.Id ? relatedSubjectRelationship.RelatedSubjectID : relatedSubjectRelationship.SubjectID;
+                var relatedSubject = _subjectRepository.GetById(relatedSubjectId);
+                relatedSubject.BackgroundColor = GetBackgroundColorByRelationshipType(relatedSubjectRelationship.RelationshipTypeID);
+            }
+        }
+
+        public void ResetRelatedSubjects(SubjectModel subject)
+        {
+            var relatedSubjectRelationships = _subjectRelationshipRepository.GetRelatedSubjects(subject);
+            foreach (var relatedSubjectRelationship in relatedSubjectRelationships)
+            {
+                var relatedSubjectId = relatedSubjectRelationship.SubjectID == subject.Id ? relatedSubjectRelationship.RelatedSubjectID : relatedSubjectRelationship.SubjectID;
+                var relatedSubject = _subjectRepository.GetById(relatedSubjectId);
+                relatedSubject.BackgroundColor = "Transparent";
+            }
         }
     }
 }

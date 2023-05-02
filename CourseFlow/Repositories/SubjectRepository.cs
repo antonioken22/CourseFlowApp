@@ -1,7 +1,6 @@
 ﻿using CourseFlow.Models;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Data.OleDb;
 
 namespace CourseFlow.Repositories
@@ -24,7 +23,34 @@ namespace CourseFlow.Repositories
         }
         public SubjectModel GetById(int id)
         {
-            throw new NotImplementedException();
+            SubjectModel subject = null;
+
+            using (var connection = GetConnection())
+            {
+                connection.Open();
+
+                using (var command = new OleDbCommand("SELECT * FROM Subjects WHERE SubjectID = @subjectID", connection))
+                {
+                    command.Parameters.AddWithValue("@subjectID", id);
+
+                    using (var reader = command.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            subject = new SubjectModel
+                            {
+                                Id = Convert.ToInt32(reader["SubjectID"]),
+                                SubjectCode = reader["SubjectCode"].ToString(),
+                                SubjectName = reader["SubjectName"].ToString(),
+                                // Add other properties as needed
+                            };
+                        }
+                    }
+                }
+            }
+
+            return subject;
+
         }
 
         public IEnumerable<SubjectModel> GetAll()

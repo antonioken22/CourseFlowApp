@@ -82,9 +82,6 @@ namespace CourseFlow.ViewModels
             LoadCoursesCommand = new ViewModelCommand(param => LoadCourses());
             LoadAcademicYearsCommand = new ViewModelCommand(param => LoadAcademicYears());
             LoadYearLevelsCommand = new ViewModelCommand(param => LoadYearLevels());
-            LoadSubjectsCommand = new ViewModelCommand(param => LoadSubjects());
-            LoadSubjectRelationshipsCommand = new ViewModelCommand(param => LoadSubjectRelationships());
-            LoadRelationshipTypesCommand = new ViewModelCommand(param => LoadRelationshipTypes());
             LoadFlowsheetCommand = new ViewModelCommand(param => LoadFlowsheet());
 
             FlowsheetData = new ObservableCollection<YearLevelData>();
@@ -99,24 +96,27 @@ namespace CourseFlow.ViewModels
 
         private void LoadCourses()
         {
-            var courses = _courseRepository.GetAll();
-            Courses.Clear();
-            foreach (var course in courses)
-            {
-                Courses.Add(course);
-            }
+            Courses = new ObservableCollection<CourseModel>(_courseRepository.GetAll());
             OnPropertyChanged(nameof(Courses));
         }
 
         private void LoadAcademicYears()
         {
-            var academicYears = _academicYearRepository.GetAll();
-            AcademicYears.Clear();
-            foreach (var academicYear in academicYears)
-            {
-                AcademicYears.Add(academicYear);
-            }
+            AcademicYears = new ObservableCollection<AcademicYearModel>(_academicYearRepository.GetAll());
             OnPropertyChanged(nameof(AcademicYears));
+        }
+
+        private void LoadFlowsheet()
+        {
+            if (SelectedCourse == null || SelectedAcademicYear == null)
+            {
+                return;
+            }
+
+            FlowsheetData.Clear();
+            LoadYearLevels();
+
+            OnPropertyChanged(nameof(FlowsheetData));
         }
 
         private void LoadYearLevels()
@@ -154,47 +154,6 @@ namespace CourseFlow.ViewModels
 
                 yearLevelData.Semesters.Add(semesterData);
             }
-        }
-
-        private void LoadSubjects()
-        {
-        }
-
-
-        private void LoadSubjectRelationships()
-        {
-            var subjectRelationships = _subjectRelationshipRepository.GetAll();
-            SubjectRelationships.Clear();
-            foreach (var subjectRelationship in subjectRelationships)
-            {
-                SubjectRelationships.Add(subjectRelationship);
-            }
-            OnPropertyChanged(nameof(SubjectRelationships));
-        }
-
-        private void LoadRelationshipTypes()
-        {
-            var relationshipTypes = _relationshipTypeRepository.GetAll();
-            RelationshipTypes.Clear();
-            foreach (var relationshipType in relationshipTypes)
-            {
-                RelationshipTypes.Add(relationshipType);
-            }
-            OnPropertyChanged(nameof(RelationshipTypes));
-        }
-
-
-        private void LoadFlowsheet()
-        {
-            if (SelectedCourse == null || SelectedAcademicYear == null)
-            {
-                return;
-            }
-
-            FlowsheetData.Clear();
-            LoadYearLevels();
-
-            OnPropertyChanged(nameof(FlowsheetData));
-        }
+        }     
     }
 }

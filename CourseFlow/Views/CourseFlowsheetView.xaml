@@ -48,13 +48,21 @@
                                                 <ItemsControl ItemsSource="{Binding Subjects}">
                                                     <ItemsControl.ItemTemplate>
                                                         <DataTemplate>
-                                                            <Border x:Name="SubjectBorder" BorderBrush="Maroon" BorderThickness="1" Margin="2.5" Padding="2.5" CornerRadius="2.5"
-                                                                    MouseEnter="SubjectBorder_MouseEnter" MouseLeave="SubjectBorder_MouseLeave"
-                                                                    Background="{Binding BackgroundColor, Converter={StaticResource ColorToBrushConverter}}">
+                                                            <Border x:Name="SubjectBorder" BorderBrush="Maroon" BorderThickness="1" Margin="2.5" Padding="2.5" CornerRadius="2.5">
                                                                 <StackPanel>
                                                                     <TextBlock Text="{Binding SubjectName}" FontSize="12" Margin="5" HorizontalAlignment="Left"/>
                                                                     <TextBlock Text="{Binding SubjectCode}" FontStyle="Italic" FontSize="10" Margin="5" HorizontalAlignment="Left"/>
                                                                 </StackPanel>
+                                                                <Border.Style>
+                                                                    <Style TargetType="Border">
+                                                                        <Setter Property="Background" Value="Transparent"/>
+                                                                        <Style.Triggers>
+                                                                            <Trigger Property="IsMouseOver" Value="True">
+                                                                                <Setter Property="Background" Value="#EEE"/>
+                                                                            </Trigger>
+                                                                        </Style.Triggers>
+                                                                    </Style>
+                                                                </Border.Style>
                                                             </Border>
                                                         </DataTemplate>
                                                     </ItemsControl.ItemTemplate>

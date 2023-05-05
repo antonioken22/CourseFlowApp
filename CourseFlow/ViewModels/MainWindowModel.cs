@@ -72,7 +72,7 @@ namespace CourseFlow.ViewModels
             userRepository = new UserRepository();
             CurrentUserAccount = new UserAccountModel();
 
-            LoadCurrentUserData();
+            // LoadCurrentUserData();
 
             // Initialize Commands
             ShowHomeViewCommand = new ViewModelCommand(ExecuteShowHomeViewCommand);
@@ -110,8 +110,8 @@ namespace CourseFlow.ViewModels
         private void ExecuteShowCourseProspectusViewCommand(object obj)
         {
             CurrentChildView = new CourseProspectusViewModel();
-            Caption = "Course Flowsheet";
-            Icon = FontAwesomeIcon.Table;
+            Caption = "Course Prospectus";
+            Icon = FontAwesomeIcon.ListAlt;
         }
 
         private void ExecuteShowCourseFlowsheetViewCommand(object obj)

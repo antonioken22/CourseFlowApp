@@ -49,7 +49,7 @@ namespace CourseFlow.ViewModels
 
         private void ExecuteLoginCommand(object obj)
         {
-            var isValidUser = userRepository.AuthenticateUser(new System.Net.NetworkCredential(Username, Password));
+            var isValidUser = true; //userRepository.AuthenticateUser(new System.Net.NetworkCredential(Username, Password));
             if (isValidUser)
             {
                 Thread.CurrentPrincipal = new GenericPrincipal(new GenericIdentity(Username), null);

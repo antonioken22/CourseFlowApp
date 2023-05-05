@@ -24,21 +24,5 @@ namespace CourseFlow.Views
         {
             courseFlowsheetViewModel.OnPageLoadCommand.Execute(this);
         }
-
-        private void SubjectBorder_MouseEnter(object sender, MouseEventArgs e)
-        {
-            if (sender is Border border && border.DataContext is SubjectModel subject)
-            {
-                courseFlowsheetViewModel.HighlightRelatedSubjects(subject);
-            }
-        }
-
-        private void SubjectBorder_MouseLeave(object sender, MouseEventArgs e)
-        {
-            if (sender is Border border && border.DataContext is SubjectModel subject)
-            {
-                courseFlowsheetViewModel.ResetRelatedSubjects(subject);
-            }
-        }
     }
 }

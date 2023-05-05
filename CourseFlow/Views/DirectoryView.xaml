@@ -3,10 +3,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:CourseFlow.Views" xmlns:fa="http://schemas.fontawesome.io/icons/"
+             xmlns:fa="http://schemas.fontawesome.io/icons/"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
+    <Grid Background="Transparent">
         <Grid.RowDefinitions>
             <RowDefinition Height="50"/>
             <RowDefinition/>
@@ -35,13 +35,14 @@
                              Margin="5,5,0,0"></TextBox>
             </StackPanel>
             <Button Grid.Column="1"
-                            Command="{Binding LoginCommand}"                            
-                            Content="Search"                            
-                            FontSize="12"
-                            FontFamily="Montserrat"
-                            Cursor="Hand"
-                            BorderThickness="0"
-                            Foreground="White"
+                    Command="{Binding LoginCommand}"                            
+                    Content="Search"                            
+                    FontSize="12"
+                    FontFamily="Montserrat"
+                    FontWeight="SemiBold"
+                    Cursor="Hand"
+                    BorderThickness="0"
+                    Foreground="White"
                     VerticalAlignment="Top">
                 <Button.Style>
                     <Style TargetType="Button">
@@ -51,16 +52,19 @@
                                 <ControlTemplate TargetType="Button">
                                     <Border Height="30"
                                                     CornerRadius="15"
-                                                    Background="{TemplateBinding Background}">
+                                                    Background="{TemplateBinding Background}"
+                                                    BorderBrush="Maroon"
+                                                    BorderThickness="1">
                                         <ContentPresenter VerticalAlignment="Center"
                                                                       HorizontalAlignment="Center"/>
                                     </Border>
                                 </ControlTemplate>
                             </Setter.Value>
                         </Setter>
+                        <Setter Property="FontWeight" Value="Bold"/>
                         <Style.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background" Value="#836EFB"/>
+                                <Setter Property="Background" Value="#FB539B"/>
                             </Trigger>
                         </Style.Triggers>
                     </Style>
@@ -68,19 +72,22 @@
             </Button>
         </Grid>
         <Border Grid.Row="1"
-                Background="{StaticResource color11}"
+                Background="Transparent"
+                BorderBrush="Maroon"
+                BorderThickness="2"
                 CornerRadius="10" 
                 Padding="10">
             <DataGrid ColumnWidth="*"
-                  Background="{StaticResource color12}"
+                  Background="Transparent"
                   BorderThickness="0">
                 <DataGrid.ColumnHeaderStyle>
                     <Style TargetType="DataGridColumnHeader">
                         <Setter Property="Background" Value="Transparent"/>
-                        <Setter Property="Foreground" Value="Maroon"/>
+                        <Setter Property="Foreground" Value="White"/>
                         <Setter Property="Padding" Value="10,0,0,10"/>
                         <Setter Property="FontFamily" Value="Montserrat"/>
                         <Setter Property="FontSize" Value="15"/>
+                        <Setter Property="FontWeight" Value="SemiBold"/>
                     </Style>
                 </DataGrid.ColumnHeaderStyle>
                 <DataGrid.Columns>

@@ -31,10 +31,11 @@
             </StackPanel>
 
             <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Right" Grid.Column="1">
-                <Button Content="CRUD" Command="{Binding CRUDCommand}" Margin="0,0,5,0" Padding="10,0"/>
+                <Button Content="Add" Command="{Binding AddCommand}" Margin="0,0,5,0" Padding="10,0"/>
+                <Button Content="Edit" Command="{Binding EditCommand}" Margin="0,0,5,0" Padding="10,0"/>
+                <Button Content="Remove" Command="{Binding RemoveCommand}" Margin="0,0,5,0" Padding="10,0"/>
             </StackPanel>
         </Grid>
-
 
         <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
             <ItemsControl ItemsSource="{Binding FlowsheetData}" Grid.Row="1">

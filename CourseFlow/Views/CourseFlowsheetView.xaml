@@ -31,9 +31,7 @@
             </StackPanel>
 
             <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Right" Grid.Column="1">
-                <Button Content="Add" Command="{Binding AddCommand}" Margin="0,0,5,0" Padding="10,0"/>
-                <Button Content="Edit" Command="{Binding EditCommand}" Margin="0,0,5,0" Padding="10,0"/>
-                <Button Content="Remove" Command="{Binding RemoveCommand}" Margin="0,0,5,0" Padding="10,0"/>
+                <Button Content="Add" Click="BtnAdd_Clicked" Margin="0,0,5,0" Padding="10,0"/>
             </StackPanel>
         </Grid>
 
@@ -58,6 +56,8 @@
                                                             <DataTemplate>
                                                                 <Border x:Name="SubjectBorder" BorderBrush="Maroon" BorderThickness="1" Margin="2.5" Padding="2.5" CornerRadius="2.5">
                                                                     <StackPanel>
+                                                                        <Button Content="Edit" Command="{Binding EditCommand}" Margin="0,0,5,0" Padding="10,0"/>
+                                                                        <Button Content="Remove" Command="{Binding RemoveCommand}" Margin="0,0,5,0" Padding="10,0"/>
                                                                         <TextBlock Text="{Binding SubjectName}" FontSize="12" Margin="5" HorizontalAlignment="Left">
                                                                             <TextBlock.Style>
                                                                                 <Style TargetType="TextBlock">

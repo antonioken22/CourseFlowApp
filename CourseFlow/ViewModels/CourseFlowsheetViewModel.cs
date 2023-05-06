@@ -1,5 +1,6 @@
 ﻿using CourseFlow.Models;
 using CourseFlow.Repositories;
+using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
@@ -60,6 +61,7 @@ namespace CourseFlow.ViewModels
         public ICommand LoadFlowsheetCommand { get; }
         public ICommand OnPageLoadCommand { get; }
 
+
         // Constructors
         public CourseFlowsheetViewModel()
         {
@@ -86,6 +88,11 @@ namespace CourseFlow.ViewModels
 
             FlowsheetData = new ObservableCollection<YearLevelData>();
             OnPageLoadCommand = new ViewModelCommand(param => OnPageLoad());
+        }
+
+        private void Add()
+        {
+            
         }
 
         private void OnPageLoad()

@@ -1,4 +1,6 @@
 ﻿using CourseFlow.ViewModels;
+using CourseFlow.Views.FlowsheetCRUD;
+using System;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -21,6 +23,12 @@ namespace CourseFlow.Views
         private void CourseFlowsheetView_Loaded(object sender, RoutedEventArgs e)
         {
             courseFlowsheetViewModel.OnPageLoadCommand.Execute(this);
+        }
+
+        private void BtnAdd_Clicked(object sender, EventArgs e)
+        {
+            SubjectsCRUDView subjectsCRUDView = new SubjectsCRUDView();
+            subjectsCRUDView.ShowDialog();
         }
     }
 }

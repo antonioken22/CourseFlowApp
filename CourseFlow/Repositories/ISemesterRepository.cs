@@ -10,5 +10,6 @@ namespace CourseFlow.Repositories
         void Remove(int id);
         SemesterModel GetById(int id);
         IEnumerable<SemesterModel> GetAll();
+        IEnumerable<SemesterModel> GetByYearLevelId(int id);
     }
 }

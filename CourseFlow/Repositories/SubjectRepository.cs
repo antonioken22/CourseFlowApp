@@ -9,7 +9,24 @@ namespace CourseFlow.Repositories
     {
         public void Add(SubjectModel subjectModel)
         {
-            throw new NotImplementedException();
+            using (var connection = GetConnection())
+            {
+                connection.Open();
+                using (var command = new OleDbCommand("INSERT INTO Subjects (SubjectCode, SubjectName, CourseID, AcademicYearID, YearLevelID, SemesterID) VALUES (@subjectCode, @subjectName, @courseID, @academicYearID, @yearLevelID, @semesterID)", connection))
+                {
+                    command.Parameters.AddWithValue("@subjectCode", subjectModel.SubjectCode);
+                    command.Parameters.AddWithValue("@subjectName", subjectModel.SubjectName);
+                    command.Parameters.AddWithValue("@courseID", subjectModel.CourseID);
+                    command.Parameters.AddWithValue("@academicYearID", subjectModel.AcademicYearID);
+                    command.Parameters.AddWithValue("@yearLevelID", subjectModel.YearLevelID);
+                    command.Parameters.AddWithValue("@semesterID", subjectModel.SemesterID);
+                    command.ExecuteNonQuery();
+                }
+                using (var command = new OleDbCommand("SELECT @@IDENTITY", connection))
+                {
+                    subjectModel.Id = Convert.ToInt32(command.ExecuteScalar());
+                }   
+            }
         }
 
         public void Edit(SubjectModel subjectModel)

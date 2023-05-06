@@ -1,13 +1,15 @@
-﻿using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-public class ViewModelBase : INotifyPropertyChanged
+namespace CourseFlow.ViewModels
 {
-    public event PropertyChangedEventHandler PropertyChanged;
-
-    internal void OnPropertyChanged([CallerMemberName] string propertyName = null)
+    public class ViewModelBase : INotifyPropertyChanged
     {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        internal void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 }

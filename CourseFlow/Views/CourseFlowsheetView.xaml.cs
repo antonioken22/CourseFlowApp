@@ -1,8 +1,6 @@
-﻿using CourseFlow.Models;
-using CourseFlow.ViewModels;
+﻿using CourseFlow.ViewModels;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
 
 namespace CourseFlow.Views
 {

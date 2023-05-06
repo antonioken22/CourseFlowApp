@@ -11,5 +11,4 @@ namespace CourseFlow.Repositories
         RelationshipTypeModel GetById(int id);
         IEnumerable<RelationshipTypeModel> GetAll();
     }
-
 }

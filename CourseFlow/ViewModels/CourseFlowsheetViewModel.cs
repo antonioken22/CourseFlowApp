@@ -90,11 +90,6 @@ namespace CourseFlow.ViewModels
             OnPageLoadCommand = new ViewModelCommand(param => OnPageLoad());
         }
 
-        private void Add()
-        {
-            
-        }
-
         private void OnPageLoad()
         {
             LoadCourses();

@@ -11,5 +11,10 @@ namespace CourseFlow.Views.FlowsheetCRUD
         {
             InitializeComponent();
         }
+
+        public void Cancel_Clicked(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
     }
 }

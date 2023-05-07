@@ -12,5 +12,6 @@ namespace CourseFlow.Repositories
         IEnumerable<SubjectRelationshipModel> GetAll();
         IEnumerable<SubjectRelationshipModel> GetBySubjectID(int subjectID);
         public List<SubjectRelationshipModel> GetRelatedSubjects(SubjectModel subject);
+        public List<SubjectRelationshipModel> GetSubjectRelationshipsBySubject(SubjectModel subject);
     }
 }

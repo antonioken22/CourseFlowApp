@@ -1,4 +1,6 @@
-﻿namespace CourseFlow.Models
+﻿using System.Windows.Media;
+
+namespace CourseFlow.Models
 {
     public class SubjectModel : AuditableEntity
     {
@@ -8,5 +10,7 @@
         public int AcademicYearID { get; set; }
         public int YearLevelID { get; set; }
         public int SemesterID { get; set; }
+
+        public Brush BackgroundColor { get; set; } = Brushes.Transparent;
     }
 }

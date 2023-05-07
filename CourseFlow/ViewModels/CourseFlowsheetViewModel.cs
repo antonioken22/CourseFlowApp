@@ -4,6 +4,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
+using System.Windows.Media;
 
 namespace CourseFlow.ViewModels
 {
@@ -23,6 +24,8 @@ namespace CourseFlow.ViewModels
         public AcademicYearModel SelectedAcademicYear { get; set; }
         public YearLevelModel LoadedYearLevel { get; set; }
         public SemesterModel LoadedSemesterModel { get; set; }
+        public SubjectModel HoveredSubject { get; set; }
+
 
         public ObservableCollection<CourseModel> Courses { get; set; }
         public ObservableCollection<AcademicYearModel> AcademicYears { get; set; }
@@ -49,6 +52,7 @@ namespace CourseFlow.ViewModels
             public ObservableCollection<SubjectModel> Subjects { get; set; }
         }
 
+
         public ICommand LoadCoursesCommand { get; }
         public ICommand LoadAcademicYearsCommand { get; }
         public ICommand LoadYearLevelsCommand { get; }
@@ -59,6 +63,9 @@ namespace CourseFlow.ViewModels
 
         public ICommand LoadFlowsheetCommand { get; }
         public ICommand OnPageLoadCommand { get; }
+
+        public ICommand SubjectMouseEnterCommand { get; }
+        public ICommand SubjectMouseLeaveCommand { get; }
 
 
         // Constructors
@@ -84,10 +91,64 @@ namespace CourseFlow.ViewModels
             LoadAcademicYearsCommand = new ViewModelCommand(param => LoadAcademicYears());
             LoadYearLevelsCommand = new ViewModelCommand(param => LoadYearLevels());
             LoadFlowsheetCommand = new ViewModelCommand(param => LoadFlowsheet());
+            LoadSubjectRelationshipsCommand = new ViewModelCommand(param => LoadSubjectRelationships(param as SubjectModel));
 
             FlowsheetData = new ObservableCollection<YearLevelData>();
             OnPageLoadCommand = new ViewModelCommand(param => OnPageLoad());
+
+            SubjectMouseEnterCommand = new ViewModelCommand(param => OnSubjectMouseEnter(param as SubjectModel));
+            SubjectMouseLeaveCommand = new ViewModelCommand(param => OnSubjectMouseLeave());
         }
+
+        // Mouse Events Methods
+        private void OnSubjectMouseEnter(SubjectModel subject)
+        {
+            if (subject == null)
+            {
+                return;
+            }
+
+            HoveredSubject = subject;
+
+            var subjectRelationships = _subjectRelationshipRepository.GetSubjectRelationshipsBySubject(subject);
+            foreach (var subjectRelationship in subjectRelationships)
+            {
+                var relatedSubject = Subjects.FirstOrDefault(s => s.Id == subjectRelationship.RelatedSubjectID);
+                if (relatedSubject != null)
+                {
+                    switch (subjectRelationship.RelationshipTypeID)
+                    {
+                        case 1: // Pre-requisite
+                            relatedSubject.BackgroundColor = Brushes.Yellow;
+                            break;
+                        case 2: // Co-requisite
+                            relatedSubject.BackgroundColor = Brushes.Green;
+                            break;
+                    }
+                }
+            }
+        }
+
+        private void OnSubjectMouseLeave()
+        {
+            if (HoveredSubject == null)
+            {
+                return;
+            }
+
+            var subjectRelationships = _subjectRelationshipRepository.GetSubjectRelationshipsBySubject(HoveredSubject);
+            foreach (var subjectRelationship in subjectRelationships)
+            {
+                var relatedSubject = Subjects.FirstOrDefault(s => s.Id == subjectRelationship.RelatedSubjectID);
+                if (relatedSubject != null)
+                {
+                    relatedSubject.BackgroundColor = Brushes.Transparent;
+                }
+            }
+
+            HoveredSubject = null;
+        }
+
 
         // Page Load Methods
         private void OnPageLoad()
@@ -123,8 +184,8 @@ namespace CourseFlow.ViewModels
 
         private void LoadYearLevels()
         {
-            var subjectsByCourseAndAcademicYear = _subjectRepository.GetSubjectsByCourseAndAcademicYear(SelectedCourse, SelectedAcademicYear);
-            var yearLevelsInSubjects = subjectsByCourseAndAcademicYear.Select(s => s.YearLevelID).Distinct().OrderBy(id => id).ToList();
+            Subjects = new ObservableCollection<SubjectModel>(_subjectRepository.GetSubjectsByCourseAndAcademicYear(SelectedCourse, SelectedAcademicYear));
+            var yearLevelsInSubjects = Subjects.Select(s => s.YearLevelID).Distinct().OrderBy(id => id).ToList();
 
             foreach (var yearLevelID in yearLevelsInSubjects)
             {
@@ -139,7 +200,7 @@ namespace CourseFlow.ViewModels
 
         private void LoadSemesters(YearLevelData yearLevelData)
         {
-            var subjectsByYearLevelCourseAndAcademicYear = _subjectRepository.GetSubjectsByYearLevelSemesterAndCourse(yearLevelData.YearLevel, null, SelectedCourse, SelectedAcademicYear);
+            var subjectsByYearLevelCourseAndAcademicYear = Subjects.Where(x => x.YearLevelID == yearLevelData.YearLevel.Id).ToList();
             var semesterIdsInSubjects = subjectsByYearLevelCourseAndAcademicYear.Select(s => s.SemesterID).Distinct().OrderBy(id => id).ToList();
 
             var semesters = _semesterRepository.GetAll().Where(s => semesterIdsInSubjects.Contains(s.Id));
@@ -148,7 +209,7 @@ namespace CourseFlow.ViewModels
                 var semesterData = new SemesterData { Semester = semester };
                 semesterData.Subjects = new ObservableCollection<SubjectModel>();
 
-                var subjects = _subjectRepository.GetSubjectsByYearLevelSemesterAndCourse(yearLevelData.YearLevel, semester, SelectedCourse, SelectedAcademicYear);
+                var subjects = subjectsByYearLevelCourseAndAcademicYear.Where(s => s.SemesterID == semester.Id).ToList();
                 foreach (var subject in subjects)
                 {
                     semesterData.Subjects.Add(subject);
@@ -156,6 +217,16 @@ namespace CourseFlow.ViewModels
 
                 yearLevelData.Semesters.Add(semesterData);
             }
-        }     
+        }
+
+        private void LoadSubjectRelationships(SubjectModel subjectModel)
+        {
+            var subjectRelationships = _subjectRelationshipRepository.GetSubjectRelationshipsBySubject(subjectModel);
+            foreach (var subjectRelationship in subjectRelationships)
+            {
+                var relationshipType = _relationshipTypeRepository.GetById(subjectRelationship.RelationshipTypeID);
+                subjectRelationship.RelationshipType = relationshipType;
+            }
+        }
     }
 }

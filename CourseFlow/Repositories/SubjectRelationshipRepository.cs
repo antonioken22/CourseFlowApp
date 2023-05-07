@@ -49,11 +49,34 @@ namespace CourseFlow.Repositories
 
         public List<SubjectRelationshipModel> GetRelatedSubjects(SubjectModel subject)
         {
-            var relatedSubjects = new List<SubjectRelationshipModel>();
+            throw new NotImplementedException();
+        }
 
+        public List<SubjectRelationshipModel> GetSubjectRelationshipsBySubject(SubjectModel subject)
+        {
             using (var connection = GetConnection())
             {
-                throw new NotImplementedException();
+                connection.Open();
+                using (var command = new OleDbCommand("SELECT * FROM SubjectRelationships WHERE SubjectID = @subjectID", connection))
+                {
+                    command.Parameters.AddWithValue("@subjectID", subject.Id);
+                    using (var reader = command.ExecuteReader())
+                    {
+                        var subjectRelationships = new List<SubjectRelationshipModel>();
+                        while (reader.Read())
+                        {
+                            var subjectRelationship = new SubjectRelationshipModel
+                            {
+                                Id = Convert.ToInt32(reader["RelationshipID"]),
+                                SubjectID = Convert.ToInt32(reader["SubjectID"]),
+                                RelatedSubjectID = Convert.ToInt32(reader["RelatedSubjectID"]),
+                                RelationshipTypeID = Convert.ToInt32(reader["RelationshipTypeID"])
+                            };
+                            subjectRelationships.Add(subjectRelationship);
+                        }
+                        return subjectRelationships;
+                    }
+                }   
             }
         }
     }

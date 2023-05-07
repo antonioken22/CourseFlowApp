@@ -203,11 +203,5 @@ namespace CourseFlow.ViewModels.FlowsheetCRUDViewModels
                 MessageBox.Show(ex.ToString());
             }
         }
-
-        // Load data from database
-        public void LoadData()
-        {
-            // Load data from your database using your data access methods
-        }
     }
 }

@@ -35,53 +35,82 @@
             </StackPanel>
         </Grid>
 
-        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
-            <ItemsControl ItemsSource="{Binding FlowsheetData}" Grid.Row="1">
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+            <ItemsControl ItemsSource="{Binding FlowsheetData}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Horizontal"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <Border BorderBrush="Maroon" BorderThickness="1" Margin="2.5" Padding="2.5">
                             <StackPanel>
-                                <!--YearLevels-->
+                                <!--Year Levels-->
                                 <TextBlock Text="{Binding YearLevel.YearLevel}" FontWeight="Bold" Margin="2.5" HorizontalAlignment="Center"/>
-                                <!--Semesters-->
                                 <ItemsControl ItemsSource="{Binding Semesters}">
                                     <ItemsControl.ItemTemplate>
                                         <DataTemplate>
                                             <Border BorderBrush="Maroon" BorderThickness="1" Margin="2.5" Padding="2.5">
                                                 <StackPanel>
+                                                    <!--Semesters-->
                                                     <TextBlock Text="{Binding Semester.Semester}" FontWeight="Bold" Margin="10" HorizontalAlignment="Center"/>
-                                                    <!--Subjects-->
                                                     <ItemsControl ItemsSource="{Binding Subjects}">
+                                                        <ItemsControl.ItemsPanel>
+                                                            <ItemsPanelTemplate>
+                                                                <StackPanel Orientation="Vertical"/>
+                                                            </ItemsPanelTemplate>
+                                                        </ItemsControl.ItemsPanel>
                                                         <ItemsControl.ItemTemplate>
                                                             <DataTemplate>
+                                                                
                                                                 <Border x:Name="SubjectBorder" BorderBrush="Maroon" BorderThickness="1" Margin="2.5" Padding="2.5" CornerRadius="2.5">
                                                                     <StackPanel>
                                                                         <Button Content="Edit" Command="{Binding EditCommand}" Margin="0,0,5,0" Padding="10,0"/>
                                                                         <Button Content="Remove" Command="{Binding RemoveCommand}" Margin="0,0,5,0" Padding="10,0"/>
+
                                                                         <TextBlock Text="{Binding SubjectName}" FontSize="12" Margin="5" HorizontalAlignment="Left">
                                                                             <TextBlock.Style>
                                                                                 <Style TargetType="TextBlock">
+                                                                                    <Setter Property="Foreground" Value="Black"/>
                                                                                     <Style.Triggers>
                                                                                         <Trigger Property="IsMouseOver" Value="True">
                                                                                             <Setter Property="Foreground" Value="Maroon"/>
+                                                                                            <Setter Property="FontWeight" Value="Bold"/>
+                                                                                            <Setter Property="FontStyle" Value="Italic"/>
+                                                                                            <Setter Property="TextDecorations" Value="Underline"/>
+                                                                                            <Setter Property="Cursor" Value="Hand"/>
                                                                                         </Trigger>
                                                                                         <DataTrigger Binding="{Binding IsMouseOver, ElementName=SubjectBorder}" Value="True">
-                                                                                            <Setter Property="Foreground" Value="Maroon"/>
+                                                                                            <Setter Property="Foreground" Value="Maroon" />
+                                                                                            <Setter Property="FontWeight" Value="Bold" />
+                                                                                            <Setter Property="FontStyle" Value="Italic" />
+                                                                                            <Setter Property="TextDecorations" Value="Underline" />
+                                                                                            <Setter Property="Cursor" Value="Hand" />
                                                                                         </DataTrigger>
                                                                                     </Style.Triggers>
                                                                                 </Style>
                                                                             </TextBlock.Style>
                                                                         </TextBlock>
+
                                                                         <TextBlock Text="{Binding SubjectCode}" FontStyle="Italic" FontSize="10" Margin="5" HorizontalAlignment="Left">
                                                                             <TextBlock.Style>
                                                                                 <Style TargetType="TextBlock">
+                                                                                    <Setter Property="Foreground" Value="Black"/>
                                                                                     <Style.Triggers>
                                                                                         <Trigger Property="IsMouseOver" Value="True">
                                                                                             <Setter Property="Foreground" Value="Maroon"/>
+                                                                                            <Setter Property="FontWeight" Value="Bold"/>
+                                                                                            <Setter Property="FontStyle" Value="Italic"/>
+                                                                                            <Setter Property="TextDecorations" Value="Underline"/>
+                                                                                            <Setter Property="Cursor" Value="Hand"/>
                                                                                         </Trigger>
                                                                                         <DataTrigger Binding="{Binding IsMouseOver, ElementName=SubjectBorder}" Value="True">
-                                                                                            <Setter Property="Foreground"
-                                                                                                    Value="Maroon"/>
+                                                                                            <Setter Property="Foreground" Value="Maroon" />
+                                                                                            <Setter Property="FontWeight" Value="Bold" />
+                                                                                            <Setter Property="FontStyle" Value="Italic" />
+                                                                                            <Setter Property="TextDecorations" Value="Underline" />
+                                                                                            <Setter Property="Cursor" Value="Hand" />
                                                                                         </DataTrigger>
                                                                                     </Style.Triggers>
                                                                                 </Style>
@@ -95,6 +124,9 @@
                                                                                 <Trigger Property="IsMouseOver" Value="True">
                                                                                     <Setter Property="Background" Value="#EEE"/>
                                                                                 </Trigger>
+                                                                                <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource AncestorType={x:Type Border}}}" Value="True">
+                                                                                    <Setter Property="Background" Value="#EEE"/>
+                                                                                </DataTrigger>
                                                                             </Style.Triggers>
                                                                         </Style>
                                                                     </Border.Style>
@@ -108,7 +140,7 @@
                                     </ItemsControl.ItemTemplate>
                                     <ItemsControl.ItemsPanel>
                                         <ItemsPanelTemplate>
-                                            <UniformGrid Rows="1"/>
+                                            <StackPanel Orientation="Horizontal"/>
                                         </ItemsPanelTemplate>
                                     </ItemsControl.ItemsPanel>
                                 </ItemsControl>
@@ -116,11 +148,6 @@
                         </Border>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <UniformGrid Rows="1"/>
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
             </ItemsControl>
         </ScrollViewer>
 

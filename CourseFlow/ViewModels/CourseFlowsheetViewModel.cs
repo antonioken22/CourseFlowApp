@@ -49,7 +49,6 @@ namespace CourseFlow.ViewModels
             public ObservableCollection<SubjectModel> Subjects { get; set; }
         }
 
-
         public ICommand LoadCoursesCommand { get; }
         public ICommand LoadAcademicYearsCommand { get; }
         public ICommand LoadYearLevelsCommand { get; }
@@ -90,6 +89,7 @@ namespace CourseFlow.ViewModels
             OnPageLoadCommand = new ViewModelCommand(param => OnPageLoad());
         }
 
+        // Page Load Methods
         private void OnPageLoad()
         {
             LoadCourses();

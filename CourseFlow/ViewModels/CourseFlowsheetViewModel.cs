@@ -1,10 +1,8 @@
 ﻿using CourseFlow.Models;
 using CourseFlow.Repositories;
-using CourseFlow.Views.FlowsheetCRUD;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Threading;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -133,7 +131,7 @@ namespace CourseFlow.ViewModels
             }
 
             HoveredSubject = subject;
-            subject.BackgroundColor = Brushes.White;
+            subject.BackgroundColor = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#eee"));
             var subjectRelationships = _subjectRelationshipRepository.GetSubjectRelationshipsBySubject(subject.Id);
             foreach (var subjectRelationship in subjectRelationships)
             {
@@ -143,13 +141,13 @@ namespace CourseFlow.ViewModels
                     switch (subjectRelationship.RelationshipTypeID)
                     {
                         case 1: // Pre-requisite
-                            relatedSubject.BackgroundColor = Brushes.Yellow;
+                            relatedSubject.BackgroundColor = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#ffe54a"));
                             break;
                         case 2: // Co-requisite
-                            relatedSubject.BackgroundColor = Brushes.Green;
+                            relatedSubject.BackgroundColor = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#98ff6e"));
                             break;
-                        case 3:
-                            relatedSubject.BackgroundColor = Brushes.Blue;
+                        case 3: // Post-requisite
+                            relatedSubject.BackgroundColor = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#a1f8ff"));
                             break;
                     }
                 }

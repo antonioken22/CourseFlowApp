@@ -6,96 +6,120 @@
         mc:Ignorable="d"
         Title="SubjectsCRUDView" Height="650" Width="500">
 
+    <Window.Resources>
+        <Style x:Key="DarkModeCheckBox" TargetType="CheckBox">
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="VerticalAlignment" Value="Top"/>
+        </Style>
+
+        <Style TargetType="Control">
+            <Setter Property="Background" Value="{DynamicResource ControlBackground}" />
+            <Setter Property="Foreground" Value="{DynamicResource ControlForeground}" />
+        </Style>
+
+        <Style TargetType="TextBlock">
+            <Setter Property="Foreground" Value="{DynamicResource ControlForeground}" />
+        </Style>
+    </Window.Resources>
+
     <ScrollViewer VerticalScrollBarVisibility="Auto">
-        <Grid Margin="20">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
+        <Grid>
+            <Grid Margin="20">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
 
-            <Label Grid.Row="0" Content="Choose Course" />
-            <ComboBox Grid.Row="1" ItemsSource="{Binding Courses}" DisplayMemberPath="CourseName" SelectedItem="{Binding SelectedCourse}" Margin="0,5,0,10"/>
+                <Label Grid.Row="0" Content="Choose Course" />
+                <ComboBox Grid.Row="1" ItemsSource="{Binding Courses}" DisplayMemberPath="CourseName" SelectedItem="{Binding SelectedCourse}" Margin="0,5,0,10"/>
 
-            <Label Grid.Row="2" Content="Choose Academic Year" />
-            <ComboBox Grid.Row="3" ItemsSource="{Binding AcademicYears}" DisplayMemberPath="AcademicYear" SelectedItem="{Binding SelectedAcademicYear}" Margin="0,5,0,10"/>
+                <Label Grid.Row="2" Content="Choose Academic Year" />
+                <ComboBox Grid.Row="3" ItemsSource="{Binding AcademicYears}" DisplayMemberPath="AcademicYear" SelectedItem="{Binding SelectedAcademicYear}" Margin="0,5,0,10"/>
 
-            <Label Grid.Row="4" Content="Choose Year Level" />
-            <ComboBox Grid.Row="5" ItemsSource="{Binding YearLevels}" DisplayMemberPath="YearLevel" SelectedValuePath="Id" SelectedValue="{Binding YearLevel}" Margin="0,5,0,10"/>
+                <Label Grid.Row="4" Content="Choose Year Level" />
+                <ComboBox Grid.Row="5" ItemsSource="{Binding YearLevels}" DisplayMemberPath="YearLevel" SelectedValuePath="Id" SelectedValue="{Binding YearLevel}" Margin="0,5,0,10"/>
 
-            <Label Grid.Row="6" Content="Choose Semester" />
-            <ComboBox Grid.Row="7" ItemsSource="{Binding Semesters}" DisplayMemberPath="Semester" SelectedValuePath="Id" SelectedValue="{Binding Semester}" Margin="0,5,0,10"/>
+                <Label Grid.Row="6" Content="Choose Semester" />
+                <ComboBox Grid.Row="7" ItemsSource="{Binding Semesters}" DisplayMemberPath="Semester" SelectedValuePath="Id" SelectedValue="{Binding Semester}" Margin="0,5,0,10"/>
 
-            <Label Grid.Row="8" Content="Subject Code" />
-            <TextBox Grid.Row="9" x:Name="SubjectCodeTextBox" Text="{Binding SubjectCode, Mode=TwoWay}" Margin="0,5,0,10"/>
+                <Label Grid.Row="8" Content="Subject Code" />
+                <TextBox Grid.Row="9" x:Name="SubjectCodeTextBox" Text="{Binding SubjectCode, Mode=TwoWay}" Margin="0,5,0,10"/>
 
-            <Label Grid.Row="10" Content="Subject Name" />
-            <TextBox Grid.Row="11" x:Name="SubjectNameTextBox" Text="{Binding SubjectName, Mode=TwoWay}" Margin="0,5,0,10"/>
+                <Label Grid.Row="10" Content="Subject Name" />
+                <TextBox Grid.Row="11" x:Name="SubjectNameTextBox" Text="{Binding SubjectName, Mode=TwoWay}" Margin="0,5,0,10"/>
 
-            <Separator Grid.Row="12" Margin="0,10,0,10"/>
+                <Separator Grid.Row="12" Margin="0,10,0,10"/>
 
-            <Grid Grid.Row="13" Margin="0,5">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
-                <Label Grid.Column="0" Content="Relationship Type" HorizontalAlignment="Center" FontWeight="Bold" />
-                <Label Grid.Column="1" Content="Related Subject Code" HorizontalAlignment="Center" FontWeight="Bold" />
+                <Grid Grid.Row="13" Margin="0,5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <!--<ColumnDefinition Width="*" />-->
+                    </Grid.ColumnDefinitions>
+                    <Label Grid.Column="0" Content="Relationship Type" HorizontalAlignment="Center" FontWeight="Bold" />
+                    <Label Grid.Column="1" Content="Related Subject Code" HorizontalAlignment="Center" FontWeight="Bold" />
+                </Grid>
+
+                <ItemsControl ItemsSource="{Binding SubjectRelationships}" Grid.Row="14">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Margin="0,5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                    <!--<ColumnDefinition Width="*" />-->
+                                </Grid.ColumnDefinitions>
+                                <Label Grid.Column="0" Content="{Binding RelationshipType.RelationshipType}" HorizontalContentAlignment="Center"/>
+                                <Label Grid.Column="1" Content="{Binding RelatedSubject.SubjectCode}" HorizontalContentAlignment="Center"/>
+                                <!--<Button Grid.Column="2" Content="Remove Relationship" Command="{Binding DataContext.RemoveRelationshipCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" CommandParameter="{Binding}" Width="120" Margin="5,0"/>-->
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+                <Grid Grid.Row="15" Margin="0,5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <!--<ColumnDefinition Width="*" />-->
+                    </Grid.ColumnDefinitions>
+                    <ComboBox Grid.Column="0" Width="150" Margin="5" ItemsSource="{Binding RelationshipTypes, Mode=TwoWay}" DisplayMemberPath="RelationshipType" SelectedItem="{Binding SelectedRelationshipType}"/>
+                    <ComboBox Grid.Column="1" Width="150" Margin="5" ItemsSource="{Binding Subjects, Mode=TwoWay}" DisplayMemberPath="SubjectCode" SelectedItem="{Binding SelectedSubject}"/>
+                </Grid>
+
+                <StackPanel Grid.Row="16">
+                    <Button Grid.Column="2" Content="Add Relationships" Command="{Binding AddRelationshipsCommand}" Margin="5,0" Padding="10,0" Width="150"/>
+                </StackPanel>
+
+                <Separator Grid.Row="17" Margin="0,20,0,10"/>
+
+                <StackPanel Grid.Row="18" Orientation="Horizontal" HorizontalAlignment="Center">
+                    <Button Content="Save" Command="{Binding SaveAllCommand}" Margin="0,5" Padding="10,0" Width="75"/>
+                    <Button Content="Cancel" Click="Cancel_Clicked" Margin="10,5" Padding="10,0" Width="75"/>
+                </StackPanel>
+
             </Grid>
 
-            <ItemsControl ItemsSource="{Binding SubjectRelationships}" Grid.Row="14">
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <Grid Margin="0,5">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="*" />
-                            </Grid.ColumnDefinitions>
-                            <Label Grid.Column="0" Content="{Binding RelationshipType.RelationshipType}" HorizontalContentAlignment="Center"/>
-                            <Label Grid.Column="1" Content="{Binding RelatedSubject.SubjectCode}" HorizontalContentAlignment="Center"/>
-                        </Grid>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-
-            <Grid Grid.Row="15" Margin="0,5">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-                <ComboBox Grid.Column="0" Width="150" Margin="5" ItemsSource="{Binding RelationshipTypes, Mode=TwoWay}" DisplayMemberPath="RelationshipType" SelectedItem="{Binding SelectedRelationshipType}"/>
-                <ComboBox Grid.Column="1" Width="150" Margin="5" ItemsSource="{Binding Subjects, Mode=TwoWay}" DisplayMemberPath="SubjectCode" SelectedItem="{Binding SelectedSubject}"/>
-            </Grid>
-
-            <StackPanel Grid.Row="16">
-                <Button Grid.Column="2" Content="Add Relationships" Command="{Binding AddRelationshipsCommand}" Margin="5,0" Padding="10,0" Width="150"/>
-            </StackPanel>
-
-            <Separator Grid.Row="17" Margin="0,20,0,10"/>
-
-            <StackPanel Grid.Row="18" Orientation="Horizontal" HorizontalAlignment="Center">
-                <Button Content="Save" Command="{Binding SaveAllCommand}" Margin="0,5" Padding="10,0" Width="75"/>
-                <Button Content="Cancel" Click="Cancel_Clicked" Margin="10,5" Padding="10,0" Width="75"/>
-            </StackPanel>
-
+            <CheckBox Style="{StaticResource DarkModeCheckBox}" Checked="DarkModeCheckBox_Checked" Unchecked="DarkModeCheckBox_Unchecked"/>
         </Grid>
     </ScrollViewer>
 </Window>

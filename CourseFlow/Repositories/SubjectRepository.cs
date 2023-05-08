@@ -176,7 +176,6 @@ namespace CourseFlow.Repositories
             return subjects;
         }
 
-
         public List<SubjectModel> GetSubjectsByCourseAndAcademicYear(CourseModel course, AcademicYearModel academicYear)
         {
             using (var connection = GetConnection())

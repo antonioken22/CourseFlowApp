@@ -1,7 +1,7 @@
-﻿using CourseFlow.Models;
-using CourseFlow.ViewModels.FlowsheetCRUDViewModels;
+﻿using CourseFlow.ViewModels.FlowsheetCRUDViewModels;
 using System.Windows;
-using System.Windows.Controls;
+using System.Windows.Media;
+
 namespace CourseFlow.Views.FlowsheetCRUD
 {
     /// <summary>
@@ -22,9 +22,9 @@ namespace CourseFlow.Views.FlowsheetCRUD
 
         public SubjectsCRUDView(int selectedSubject)
         {
-            this.selectedSubject = selectedSubject;
             InitializeComponent();
-            this.DataContext = subjectsCRUDViewModel = new SubjectsCRUDViewModel();
+            this.selectedSubject = selectedSubject;
+            this.DataContext = subjectsCRUDViewModel = new SubjectsCRUDViewModel(selectedSubject);
             this.Loaded += SubjectsCRUDView_Loaded;
         }
 
@@ -46,6 +46,20 @@ namespace CourseFlow.Views.FlowsheetCRUD
         private void Cancel_Clicked(object sender, RoutedEventArgs e)
         {
             this.Close();
+        }
+
+        private void DarkModeCheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+            Application.Current.Resources["WindowBackground"] = new SolidColorBrush(Color.FromArgb(255, 30, 30, 30));
+            Application.Current.Resources["ControlBackground"] = new SolidColorBrush(Color.FromArgb(255, 40, 40, 40));
+            Application.Current.Resources["ControlForeground"] = new SolidColorBrush(Color.FromArgb(255, 200, 200, 200));
+        }
+
+        private void DarkModeCheckBox_Unchecked(object sender, RoutedEventArgs e)
+        {
+            Application.Current.Resources["WindowBackground"] = SystemColors.WindowBrush;
+            Application.Current.Resources["ControlBackground"] = SystemColors.ControlBrush;
+            Application.Current.Resources["ControlForeground"] = SystemColors.ControlTextBrush;
         }
     }
 }

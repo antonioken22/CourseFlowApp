@@ -35,7 +35,7 @@ namespace CourseFlow.ViewModels.FlowsheetCRUDViewModels
         private int _yearLevel;
         public int YearLevel
         {
-            get { return _yearLevel; } 
+            get { return _yearLevel; }
             set
             {
                 _yearLevel = value;
@@ -60,7 +60,7 @@ namespace CourseFlow.ViewModels.FlowsheetCRUDViewModels
             get { return _subjectCode; }
             set
             {
-                _subjectCode = value; 
+                _subjectCode = value;
                 OnPropertyChanged(nameof(SubjectCode));
             }
         }
@@ -69,10 +69,10 @@ namespace CourseFlow.ViewModels.FlowsheetCRUDViewModels
         public string SubjectName
         {
             get { return _subjectName; }
-            set 
-            { 
+            set
+            {
                 _subjectName = value;
-                OnPropertyChanged(nameof(SubjectName)); 
+                OnPropertyChanged(nameof(SubjectName));
             }
         }
 
@@ -121,11 +121,18 @@ namespace CourseFlow.ViewModels.FlowsheetCRUDViewModels
         public ICommand OnWindowLoadCommand { get; }
         public ICommand AddRelationshipsCommand { get; }
         public ICommand SaveAllCommand { get; }
+        public ICommand RemoveRelationshipCommand { get; }
+
 
 
         // Constructor
-        public SubjectsCRUDViewModel()
+        public SubjectsCRUDViewModel(int? selectedSubjectId = null)
         {
+            if (selectedSubjectId.HasValue)
+            {
+                _selectedSubject = new SubjectModel { Id = selectedSubjectId.Value };
+            }
+
             _courseRepository = new CourseRepository();
             _academicYearRepository = new AcademicYearRepository();
             _yearLevelRepository = new YearLevelRepository();
@@ -136,17 +143,19 @@ namespace CourseFlow.ViewModels.FlowsheetCRUDViewModels
 
             OnWindowLoadCommand = new ViewModelCommand(param => OnWindowLoad());
             AddRelationshipsCommand = new ViewModelCommand(param => AddRelationships());
+            // RemoveRelationshipCommand = new ViewModelCommand(param=> RemoveRelationship(param as SubjectRelationshipModel));
             SaveAllCommand = new ViewModelCommand(param => SaveAll());
 
             SubjectRelationships = new ObservableCollection<SubjectRelationshipModel>();
         }
 
+
         // Edit Button Methods
         public bool LoadSelectedSubjects(int id)
         {
-            _selectedSubject =  _subjectRepository.GetById(id);
+            SelectedSubject = _subjectRepository.GetById(id);
 
-            if (_selectedSubject == null)
+            if (SelectedSubject == null)
             {
                 return false;
             }
@@ -169,6 +178,24 @@ namespace CourseFlow.ViewModels.FlowsheetCRUDViewModels
 
             return true;
         }
+
+        // TODO - Make the RemoveRelationship method work   
+
+        //public void RemoveRelationship(SubjectRelationshipModel relationship)
+        //{
+        //    if (relationship.RelatedSubject == null || relationship.Subject == null)
+        //    {
+        //        MessageBox.Show("The related subject or subject is missing. Unable to remove the relationship.");
+        //        return;
+        //    }
+
+        //    if (MessageBox.Show("Are you sure you want to remove this relationship?", $"Removing relationship between {relationship.RelatedSubject.SubjectCode} and {relationship.Subject.SubjectCode}", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+        //    {
+        //        relationship.IsRemoved = true;
+        //        SubjectRelationships.Remove(relationship);
+        //        MessageBox.Show($"Marked the relationship between {relationship.RelatedSubject.SubjectCode} and {relationship.Subject.SubjectCode} for removal.");
+        //    }
+        //}
 
         // Add Button Methods
         private void OnWindowLoad()
@@ -231,11 +258,11 @@ namespace CourseFlow.ViewModels.FlowsheetCRUDViewModels
             var subjectRelationship = new SubjectRelationshipModel
             {
                 SubjectID = null,
-                RelationshipTypeID = SelectedRelationshipType.Id, 
-                RelatedSubjectID = SelectedSubject.Id, 
+                RelationshipTypeID = SelectedRelationshipType.Id,
+                RelatedSubjectID = SelectedSubject.Id,
                 RelationshipType = SelectedRelationshipType,
                 RelatedSubject = SelectedSubject
-            }; 
+            };
 
             SubjectRelationships.Add(subjectRelationship);
 
@@ -245,6 +272,8 @@ namespace CourseFlow.ViewModels.FlowsheetCRUDViewModels
             SelectedSubject = null;
         }
 
+
+        // Save Button Methods
         private void SaveAll()
         {
             try

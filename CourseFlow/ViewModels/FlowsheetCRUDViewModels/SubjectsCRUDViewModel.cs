@@ -32,10 +32,49 @@ namespace CourseFlow.ViewModels.FlowsheetCRUDViewModels
         public ObservableCollection<SubjectRelationshipModel> SubjectRelationships { get; set; }
         public ObservableCollection<RelationshipTypeModel> RelationshipTypes { get; set; }
 
-        public int YearLevel { get; set; }
-        public int Semester { get; set; }
-        public string SubjectCode { get; set; }
-        public string SubjectName { get; set; }
+        private int _yearLevel;
+        public int YearLevel
+        {
+            get { return _yearLevel; } 
+            set
+            {
+                _yearLevel = value;
+                OnPropertyChanged(nameof(YearLevel));
+            }
+        }
+
+        private int _semester;
+        public int Semester
+        {
+            get { return _semester; }
+            set
+            {
+                _semester = value;
+                OnPropertyChanged(nameof(Semester));
+            }
+        }
+
+        private string _subjectCode;
+        public string SubjectCode
+        {
+            get { return _subjectCode; }
+            set
+            {
+                _subjectCode = value; 
+                OnPropertyChanged(nameof(SubjectCode));
+            }
+        }
+
+        private string _subjectName;
+        public string SubjectName
+        {
+            get { return _subjectName; }
+            set 
+            { 
+                _subjectName = value;
+                OnPropertyChanged(nameof(SubjectName)); 
+            }
+        }
 
         public CourseModel SelectedCourse
         {
@@ -102,6 +141,36 @@ namespace CourseFlow.ViewModels.FlowsheetCRUDViewModels
             SubjectRelationships = new ObservableCollection<SubjectRelationshipModel>();
         }
 
+        // Edit Button Methods
+        public bool LoadSelectedSubjects(int id)
+        {
+            _selectedSubject =  _subjectRepository.GetById(id);
+
+            if (_selectedSubject == null)
+            {
+                return false;
+            }
+
+            SelectedCourse = Courses.Where(s => s.Id == _selectedSubject.CourseID).FirstOrDefault();
+            SelectedAcademicYear = AcademicYears.Where(s => s.Id == _selectedSubject.AcademicYearID).FirstOrDefault();
+            YearLevel = _selectedSubject.YearLevelID;
+            Semester = _selectedSubject.SemesterID;
+            SubjectCode = _selectedSubject.SubjectCode;
+            SubjectName = _selectedSubject.SubjectName;
+
+            var subjectRelationships = _subjectRelationshipRepository.GetSubjectRelationshipsBySubject(id);
+            foreach (var subjectRelationship in subjectRelationships)
+            {
+                subjectRelationship.RelationshipType = RelationshipTypes.Where(s => s.Id == subjectRelationship.RelationshipTypeID).FirstOrDefault();
+                subjectRelationship.RelatedSubject = Subjects.Where(s => s.Id == subjectRelationship.RelatedSubjectID).FirstOrDefault();
+                SubjectRelationships.Add(subjectRelationship);
+            }
+            OnPropertyChanged(nameof(SubjectRelationships));
+
+            return true;
+        }
+
+        // Add Button Methods
         private void OnWindowLoad()
         {
             LoadAcademicYears();

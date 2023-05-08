@@ -32,7 +32,7 @@
             </StackPanel>
 
             <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Right" Grid.Column="1">
-                <Button Content="Add" Click="BtnAdd_Clicked" Margin="0,0,5,0" Padding="10,0"/>
+                <Button Content="Add Subjects" Click="ButtonAddSubject_Clicked" Margin="0,0,5,0" Padding="10,0"/>
             </StackPanel>
         </Grid>
 
@@ -72,7 +72,7 @@
                                                                 <Border x:Name="SubjectBorder" BorderBrush="Maroon" BorderThickness="1" Margin="2.5" Padding="2.5" CornerRadius="2.5">
                                                                     <i:Interaction.Triggers>
                                                                         <i:EventTrigger EventName="MouseEnter">
-                                                                            <i:InvokeCommandAction Command="{Binding DataContext.SubjectMouseEnterCommand, RelativeSource={RelativeSource AncestorType=ItemsControl, AncestorLevel=3}}" CommandParameter="{Binding }"/>
+                                                                            <i:InvokeCommandAction Command="{Binding DataContext.SubjectMouseEnterCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" CommandParameter="{Binding }"/>
                                                                         </i:EventTrigger>
                                                                         <i:EventTrigger EventName="MouseLeave">
                                                                             <i:InvokeCommandAction Command="{Binding DataContext.SubjectMouseLeaveCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" />
@@ -80,8 +80,8 @@
                                                                     </i:Interaction.Triggers>
                                                                     
                                                                     <StackPanel>
-                                                                        <Button Content="Edit" Command="{Binding EditCommand}" Margin="0,0,5,0" Padding="10,0"/>
-                                                                        <Button Content="Remove" Command="{Binding RemoveCommand}" Margin="0,0,5,0" Padding="10,0"/>
+                                                                        <Button Content="Edit" Click="Button_Click"  Margin="0,0,5,0" Padding="10,0"/>
+                                                                        <Button Content="Remove" Command="{Binding DataContext.RemoveSubjectCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" CommandParameter="{Binding}" Margin="0,0,5,0" Padding="10,0"/>
 
                                                                         <TextBlock Text="{Binding SubjectName}" FontSize="12" Margin="5" HorizontalAlignment="Left">
                                                                             <TextBlock.Style>
@@ -102,7 +102,7 @@
                                                                     
                                                                     <Border.Style>
                                                                         <Style TargetType="Border">
-                                                                            <Setter Property="Background" Value="{Binding BackgroundColor}"/>
+                                                                            <Setter Property="Background" Value="{Binding BackgroundColor,Mode=TwoWay}"/>
                                                                             
                                                                         </Style>
                                                                     </Border.Style>

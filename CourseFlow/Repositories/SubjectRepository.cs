@@ -31,13 +31,37 @@ namespace CourseFlow.Repositories
 
         public void Edit(SubjectModel subjectModel)
         {
-            throw new NotImplementedException();
+            using (var connection = GetConnection())
+            {
+                connection.Open();
+                using (var command = new OleDbCommand("UPDATE Subjects SET SubjectCode = @subjectCode, SubjectName = @subjectName, CourseID = @courseID, AcademicYearID = @academicYearID, YearLevelID = @yearLevelID, SemesterID = @semesterID WHERE Id = @id", connection))
+                {
+                    command.Parameters.AddWithValue("@subjectCode", subjectModel.SubjectCode);
+                    command.Parameters.AddWithValue("@subjectName", subjectModel.SubjectName);
+                    command.Parameters.AddWithValue("@courseID", subjectModel.CourseID);
+                    command.Parameters.AddWithValue("@academicYearID", subjectModel.AcademicYearID);
+                    command.Parameters.AddWithValue("@yearLevelID", subjectModel.YearLevelID);
+                    command.Parameters.AddWithValue("@semesterID", subjectModel.SemesterID);
+                    command.Parameters.AddWithValue("@id", subjectModel.Id);
+                    command.ExecuteNonQuery();
+                }
+            }
         }
+
 
         public void Remove(int id)
         {
-            throw new NotImplementedException();
+            using (var connection = GetConnection())
+            {
+                connection.Open();
+                using (var command = new OleDbCommand("DELETE FROM Subjects WHERE SubjectID = @subjectModel", connection))
+                {
+                    command.Parameters.AddWithValue("@subjectModel", id);
+                    command.ExecuteNonQuery();
+                }
+            }
         }
+
         public SubjectModel GetById(int id)
         {
             SubjectModel subject = null;
@@ -59,7 +83,10 @@ namespace CourseFlow.Repositories
                                 Id = Convert.ToInt32(reader["SubjectID"]),
                                 SubjectCode = reader["SubjectCode"].ToString(),
                                 SubjectName = reader["SubjectName"].ToString(),
-                                // Add other properties as needed
+                                CourseID = int.Parse(reader["CourseID"].ToString()),
+                                AcademicYearID = int.Parse(reader["AcademicYearID"].ToString()),
+                                YearLevelID = int.Parse(reader["YearLevelID"].ToString()),
+                                SemesterID = int.Parse(reader["SemesterID"].ToString())
                             };
                         }
                     }

@@ -1,8 +1,11 @@
 ﻿using CourseFlow.Models;
 using CourseFlow.Repositories;
+using CourseFlow.Views.FlowsheetCRUD;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading;
+using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 
@@ -58,7 +61,6 @@ namespace CourseFlow.ViewModels
         public ICommand LoadYearLevelsCommand { get; }
         public ICommand LoadSemestersCommand { get; }
         public ICommand LoadSubjectsCommand { get; }
-        public ICommand LoadSubjectRelationshipsCommand { get; }
         public ICommand LoadRelationshipTypesCommand { get; }
 
         public ICommand LoadFlowsheetCommand { get; }
@@ -66,6 +68,8 @@ namespace CourseFlow.ViewModels
 
         public ICommand SubjectMouseEnterCommand { get; }
         public ICommand SubjectMouseLeaveCommand { get; }
+
+        public ICommand RemoveSubjectCommand { get; }
 
 
         // Constructors
@@ -91,13 +95,33 @@ namespace CourseFlow.ViewModels
             LoadAcademicYearsCommand = new ViewModelCommand(param => LoadAcademicYears());
             LoadYearLevelsCommand = new ViewModelCommand(param => LoadYearLevels());
             LoadFlowsheetCommand = new ViewModelCommand(param => LoadFlowsheet());
-            LoadSubjectRelationshipsCommand = new ViewModelCommand(param => LoadSubjectRelationships(param as SubjectModel));
 
             FlowsheetData = new ObservableCollection<YearLevelData>();
             OnPageLoadCommand = new ViewModelCommand(param => OnPageLoad());
 
             SubjectMouseEnterCommand = new ViewModelCommand(param => OnSubjectMouseEnter(param as SubjectModel));
             SubjectMouseLeaveCommand = new ViewModelCommand(param => OnSubjectMouseLeave());
+
+            RemoveSubjectCommand = new ViewModelCommand(param => RemoveSubject(param as SubjectModel));
+        }
+
+        // Edit and Remove
+        private void RemoveSubject(SubjectModel subject)
+        {
+            if(MessageBox.Show("Are you sure you want to Delete this Subject?", caption: $"Removing {subject.SubjectCode} {subject.SubjectName}", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+            {
+                try
+                {
+                    _subjectRepository.Remove(subject.Id);
+                    MessageBox.Show($"Successfully Removed the Subject: {subject.SubjectCode} {subject.SubjectName}");
+                    LoadFlowsheet();
+                }
+                catch (Exception e)
+                {
+
+                    MessageBox.Show(e.Message);
+                }
+            }
         }
 
         // Mouse Events Methods
@@ -109,8 +133,8 @@ namespace CourseFlow.ViewModels
             }
 
             HoveredSubject = subject;
-
-            var subjectRelationships = _subjectRelationshipRepository.GetSubjectRelationshipsBySubject(subject);
+            subject.BackgroundColor = Brushes.White;
+            var subjectRelationships = _subjectRelationshipRepository.GetSubjectRelationshipsBySubject(subject.Id);
             foreach (var subjectRelationship in subjectRelationships)
             {
                 var relatedSubject = Subjects.FirstOrDefault(s => s.Id == subjectRelationship.RelatedSubjectID);
@@ -124,9 +148,14 @@ namespace CourseFlow.ViewModels
                         case 2: // Co-requisite
                             relatedSubject.BackgroundColor = Brushes.Green;
                             break;
+                        case 3:
+                            relatedSubject.BackgroundColor = Brushes.Blue;
+                            break;
                     }
                 }
             }
+            OnPropertyChanged(nameof(FlowsheetData));
+            OnPropertyChanged(nameof(SubjectModel.BackgroundColor));
         }
 
         private void OnSubjectMouseLeave()
@@ -135,8 +164,8 @@ namespace CourseFlow.ViewModels
             {
                 return;
             }
-
-            var subjectRelationships = _subjectRelationshipRepository.GetSubjectRelationshipsBySubject(HoveredSubject);
+            HoveredSubject.BackgroundColor = Brushes.Transparent;
+            var subjectRelationships = _subjectRelationshipRepository.GetSubjectRelationshipsBySubject(HoveredSubject.Id);
             foreach (var subjectRelationship in subjectRelationships)
             {
                 var relatedSubject = Subjects.FirstOrDefault(s => s.Id == subjectRelationship.RelatedSubjectID);
@@ -219,14 +248,5 @@ namespace CourseFlow.ViewModels
             }
         }
 
-        private void LoadSubjectRelationships(SubjectModel subjectModel)
-        {
-            var subjectRelationships = _subjectRelationshipRepository.GetSubjectRelationshipsBySubject(subjectModel);
-            foreach (var subjectRelationship in subjectRelationships)
-            {
-                var relationshipType = _relationshipTypeRepository.GetById(subjectRelationship.RelationshipTypeID);
-                subjectRelationship.RelationshipType = relationshipType;
-            }
-        }
     }
 }

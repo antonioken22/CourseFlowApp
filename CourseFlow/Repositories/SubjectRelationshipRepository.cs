@@ -29,7 +29,15 @@ namespace CourseFlow.Repositories
 
         public void Remove(int id)
         {
-            throw new NotImplementedException();
+            using (var connection = GetConnection())
+            {
+                connection.Open();
+                using (var command = new OleDbCommand("DELETE FROM SubjectRelationships WHERE Id = @id", connection))
+                {
+                    command.Parameters.AddWithValue("@id", id);
+                    command.ExecuteNonQuery();
+                }
+            }
         }
 
         public IEnumerable<SubjectRelationshipModel> GetAll()
@@ -52,14 +60,14 @@ namespace CourseFlow.Repositories
             throw new NotImplementedException();
         }
 
-        public List<SubjectRelationshipModel> GetSubjectRelationshipsBySubject(SubjectModel subject)
+        public List<SubjectRelationshipModel> GetSubjectRelationshipsBySubject(int id)
         {
             using (var connection = GetConnection())
             {
                 connection.Open();
                 using (var command = new OleDbCommand("SELECT * FROM SubjectRelationships WHERE SubjectID = @subjectID", connection))
                 {
-                    command.Parameters.AddWithValue("@subjectID", subject.Id);
+                    command.Parameters.AddWithValue("@subjectID", id);
                     using (var reader = command.ExecuteReader())
                     {
                         var subjectRelationships = new List<SubjectRelationshipModel>();

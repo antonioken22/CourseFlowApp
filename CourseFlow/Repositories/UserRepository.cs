@@ -68,7 +68,8 @@ namespace CourseFlow.Repositories
                             Password = string.Empty,
                             FirstName = reader[3].ToString(),
                             LastName = reader[4].ToString(),
-                            Email = reader[5].ToString()
+                            Email = reader[5].ToString(),
+                            Role = reader[6].ToString(),
                         };
                     }
                 }

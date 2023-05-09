@@ -28,6 +28,7 @@ namespace CourseFlow.ViewModels
         public SubjectModel HoveredSubject { get; set; }
 
 
+
         public ObservableCollection<CourseModel> Courses { get; set; }
         public ObservableCollection<AcademicYearModel> AcademicYears { get; set; }
         public ObservableCollection<YearLevelModel> YearLevels { get; set; }
@@ -71,8 +72,10 @@ namespace CourseFlow.ViewModels
 
 
         // Constructors
-        public CourseFlowsheetViewModel()
+        public CourseFlowsheetViewModel(UserModel currentUser)
         {
+            CurrentUser = currentUser;
+
             _courseRepository = new CourseRepository();
             _academicYearRepository = new AcademicYearRepository();
             _yearLevelRepository = new YearLevelRepository();
@@ -246,5 +249,25 @@ namespace CourseFlow.ViewModels
             }
         }
 
+        // Role Authority
+        private UserModel _currentUser;
+        public UserModel CurrentUser
+        {
+            get { return _currentUser; }
+            set
+            {
+                _currentUser = value;
+                OnPropertyChanged(nameof(CurrentUser));
+                OnPropertyChanged(nameof(AddSubjectButtonVisibility));
+            }
+        }
+
+        public Visibility AddSubjectButtonVisibility
+        {
+            get
+            {
+                return CurrentUser?.Role == "Admin" ? Visibility.Visible : Visibility.Collapsed;
+            }
+        }
     }
 }

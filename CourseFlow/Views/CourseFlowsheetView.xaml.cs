@@ -4,7 +4,6 @@ using CourseFlow.Views.FlowsheetCRUD;
 using System;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
 
 namespace CourseFlow.Views
 {
@@ -14,11 +13,12 @@ namespace CourseFlow.Views
     public partial class CourseFlowsheetView : UserControl
     {
         private readonly CourseFlowsheetViewModel courseFlowsheetViewModel;
+        private UserModel currentUser;
 
         public CourseFlowsheetView()
         {
             InitializeComponent();
-            this.DataContext = courseFlowsheetViewModel = new CourseFlowsheetViewModel();
+            this.DataContext = courseFlowsheetViewModel = new CourseFlowsheetViewModel(currentUser);
             this.Loaded += CourseFlowsheetView_Loaded;
         }
             

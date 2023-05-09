@@ -11,6 +11,7 @@ namespace CourseFlow.ViewModels
     {
         // Fields
         private UserAccountModel _currentUserAccount;
+        private UserModel _currentUser;
         private ViewModelBase _currentChildView;
         private string _caption;
         private FontAwesomeIcon _icon;
@@ -18,6 +19,16 @@ namespace CourseFlow.ViewModels
         private IUserRepository userRepository;
 
         // Properties
+        public UserModel CurrentUser
+        {
+            get { return _currentUser; }
+            set
+            {
+                _currentUser = value;
+                OnPropertyChanged(nameof(CurrentUser));
+            }
+        }
+
         public UserAccountModel CurrentUserAccount
         {
             get { return _currentUserAccount; }
@@ -72,7 +83,7 @@ namespace CourseFlow.ViewModels
             userRepository = new UserRepository();
             CurrentUserAccount = new UserAccountModel();
 
-            // LoadCurrentUserData();
+            LoadCurrentUserData();
 
             // Initialize Commands
             ShowHomeViewCommand = new ViewModelCommand(ExecuteShowHomeViewCommand);
@@ -116,7 +127,7 @@ namespace CourseFlow.ViewModels
 
         private void ExecuteShowCourseFlowsheetViewCommand(object obj)
         {
-            CurrentChildView = new CourseFlowsheetViewModel();
+            CurrentChildView = new CourseFlowsheetViewModel(CurrentUser);
             Caption = "Course Flowsheet";
             Icon = FontAwesomeIcon.Table;
         }
@@ -136,7 +147,6 @@ namespace CourseFlow.ViewModels
             {
                 CurrentUserAccount.Username = user.Username;
                 CurrentUserAccount.DisplayName = $"{user.FirstName} {user.LastName}";
-                CurrentUserAccount.ProfilePicture = null;
             }
             else
             {

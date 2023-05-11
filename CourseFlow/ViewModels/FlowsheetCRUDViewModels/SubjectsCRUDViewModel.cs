@@ -126,12 +126,8 @@ namespace CourseFlow.ViewModels.FlowsheetCRUDViewModels
 
 
         // Constructor
-        public SubjectsCRUDViewModel(int? selectedSubjectId = null)
+        public SubjectsCRUDViewModel()
         {
-            if (selectedSubjectId.HasValue)
-            {
-                _selectedSubject = new SubjectModel { Id = selectedSubjectId.Value };
-            }
 
             _courseRepository = new CourseRepository();
             _academicYearRepository = new AcademicYearRepository();
@@ -143,7 +139,7 @@ namespace CourseFlow.ViewModels.FlowsheetCRUDViewModels
 
             OnWindowLoadCommand = new ViewModelCommand(param => OnWindowLoad());
             AddRelationshipsCommand = new ViewModelCommand(param => AddRelationships());
-            // RemoveRelationshipCommand = new ViewModelCommand(param=> RemoveRelationship(param as SubjectRelationshipModel));
+            RemoveRelationshipCommand = new ViewModelCommand(param=> RemoveRelationship(param as SubjectRelationshipModel));
             SaveAllCommand = new ViewModelCommand(param => SaveAll());
 
             SubjectRelationships = new ObservableCollection<SubjectRelationshipModel>();
@@ -151,7 +147,7 @@ namespace CourseFlow.ViewModels.FlowsheetCRUDViewModels
 
 
         // Edit Button Methods
-        public bool LoadSelectedSubjects(int id)
+        public bool LoadSelectedSubject(int id)
         {
             SelectedSubject = _subjectRepository.GetById(id);
 
@@ -181,21 +177,21 @@ namespace CourseFlow.ViewModels.FlowsheetCRUDViewModels
 
         // TODO - Make the RemoveRelationship method work   
 
-        //public void RemoveRelationship(SubjectRelationshipModel relationship)
-        //{
-        //    if (relationship.RelatedSubject == null || relationship.Subject == null)
-        //    {
-        //        MessageBox.Show("The related subject or subject is missing. Unable to remove the relationship.");
-        //        return;
-        //    }
+        public void RemoveRelationship(SubjectRelationshipModel relationship)
+        {
+            if (relationship.RelatedSubject == null)
+            {
+                MessageBox.Show("The related subject or subject is missing. Unable to remove the relationship.");
+                return;
+            }
 
-        //    if (MessageBox.Show("Are you sure you want to remove this relationship?", $"Removing relationship between {relationship.RelatedSubject.SubjectCode} and {relationship.Subject.SubjectCode}", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
-        //    {
-        //        relationship.IsRemoved = true;
-        //        SubjectRelationships.Remove(relationship);
-        //        MessageBox.Show($"Marked the relationship between {relationship.RelatedSubject.SubjectCode} and {relationship.Subject.SubjectCode} for removal.");
-        //    }
-        //}
+            if (MessageBox.Show("Are you sure you want to remove this relationship?", $"Removing relationship between {relationship.RelatedSubject.SubjectCode}", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+            {
+                relationship.IsRemoved = true;
+                SubjectRelationships.Remove(relationship);
+                OnPropertyChanged(nameof(SubjectRelationships));
+            }
+        }
 
         // Add Button Methods
         private void OnWindowLoad()
@@ -293,8 +289,13 @@ namespace CourseFlow.ViewModels.FlowsheetCRUDViewModels
                     subjectRelationship.SubjectID = subject.Id;
                     _subjectRelationshipRepository.Add(subjectRelationship);
                 }
-
+                
                 MessageBox.Show("Successfully saved!");
+                SubjectCode = String.Empty;
+                SubjectName = String.Empty;
+                SubjectRelationships.Clear();
+                OnPropertyChanged(nameof(SubjectRelationships));
+                LoadSubjects();
             }
             catch (Exception ex)
             {

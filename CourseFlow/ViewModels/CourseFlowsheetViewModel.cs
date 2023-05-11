@@ -71,10 +71,10 @@ namespace CourseFlow.ViewModels
         public ICommand RemoveSubjectCommand { get; }
 
 
+
         // Constructors
-        public CourseFlowsheetViewModel(UserModel currentUser)
+        public CourseFlowsheetViewModel()
         {
-            CurrentUser = currentUser;
 
             _courseRepository = new CourseRepository();
             _academicYearRepository = new AcademicYearRepository();
@@ -104,6 +104,8 @@ namespace CourseFlow.ViewModels
             SubjectMouseLeaveCommand = new ViewModelCommand(param => OnSubjectMouseLeave());
 
             RemoveSubjectCommand = new ViewModelCommand(param => RemoveSubject(param as SubjectModel));
+            App.CurrentUser.Role = "Admin";
+
         }
 
         // Edit and Remove
@@ -250,23 +252,11 @@ namespace CourseFlow.ViewModels
         }
 
         // Role Authority
-        private UserModel _currentUser;
-        public UserModel CurrentUser
-        {
-            get { return _currentUser; }
-            set
-            {
-                _currentUser = value;
-                OnPropertyChanged(nameof(CurrentUser));
-                OnPropertyChanged(nameof(AddSubjectButtonVisibility));
-            }
-        }
-
         public Visibility AddSubjectButtonVisibility
         {
             get
             {
-                return CurrentUser?.Role == "Admin" ? Visibility.Visible : Visibility.Collapsed;
+                return App.CurrentUser?.Role == "Admin" ? Visibility.Visible : Visibility.Collapsed;
             }
         }
     }

@@ -73,7 +73,7 @@
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="*" />
-                        <!--<ColumnDefinition Width="*" />-->
+                        <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
                     <Label Grid.Column="0" Content="Relationship Type" HorizontalAlignment="Center" FontWeight="Bold" />
                     <Label Grid.Column="1" Content="Related Subject Code" HorizontalAlignment="Center" FontWeight="Bold" />
@@ -86,11 +86,11 @@
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*" />
                                     <ColumnDefinition Width="*" />
-                                    <!--<ColumnDefinition Width="*" />-->
+                                    <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
                                 <Label Grid.Column="0" Content="{Binding RelationshipType.RelationshipType}" HorizontalContentAlignment="Center"/>
                                 <Label Grid.Column="1" Content="{Binding RelatedSubject.SubjectCode}" HorizontalContentAlignment="Center"/>
-                                <!--<Button Grid.Column="2" Content="Remove Relationship" Command="{Binding DataContext.RemoveRelationshipCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" CommandParameter="{Binding}" Width="120" Margin="5,0"/>-->
+                                <Button Grid.Column="2" Content="Remove Relationship" Command="{Binding DataContext.RemoveRelationshipCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" CommandParameter="{Binding}" Width="120" Margin="5,0"/>
                             </Grid>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
@@ -100,7 +100,7 @@
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="*" />
-                        <!--<ColumnDefinition Width="*" />-->
+                        <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
                     <ComboBox Grid.Column="0" Width="150" Margin="5" ItemsSource="{Binding RelationshipTypes, Mode=TwoWay}" DisplayMemberPath="RelationshipType" SelectedItem="{Binding SelectedRelationshipType}"/>
                     <ComboBox Grid.Column="1" Width="150" Margin="5" ItemsSource="{Binding Subjects, Mode=TwoWay}" DisplayMemberPath="SubjectCode" SelectedItem="{Binding SelectedSubject}"/>

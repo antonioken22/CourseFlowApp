@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CourseFlow.ViewModels;
+using System;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Input;
@@ -15,6 +16,9 @@ namespace CourseFlow.Views
         {
             InitializeComponent();
             this.MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight;
+            var bindingContext = new MainWindowModel(); 
+            this.DataContext = bindingContext;
+            
         }
 
         [DllImport("user32.dll")]

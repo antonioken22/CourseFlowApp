@@ -10,8 +10,6 @@ namespace CourseFlow.ViewModels
     public class MainWindowModel : ViewModelBase
     {
         // Fields
-        private UserAccountModel _currentUserAccount;
-        private UserModel _currentUser;
         private ViewModelBase _currentChildView;
         private string _caption;
         private FontAwesomeIcon _icon;
@@ -19,25 +17,6 @@ namespace CourseFlow.ViewModels
         private IUserRepository userRepository;
 
         // Properties
-        public UserModel CurrentUser
-        {
-            get { return _currentUser; }
-            set
-            {
-                _currentUser = value;
-                OnPropertyChanged(nameof(CurrentUser));
-            }
-        }
-
-        public UserAccountModel CurrentUserAccount
-        {
-            get { return _currentUserAccount; }
-            set
-            {
-                _currentUserAccount = value;
-                OnPropertyChanged(nameof(CurrentUserAccount));
-            }
-        }
 
         public ViewModelBase CurrentChildView 
         { 
@@ -81,9 +60,8 @@ namespace CourseFlow.ViewModels
         public MainWindowModel()
         {
             userRepository = new UserRepository();
-            CurrentUserAccount = new UserAccountModel();
 
-            LoadCurrentUserData();
+            // LoadCurrentUserData();
 
             // Initialize Commands
             ShowHomeViewCommand = new ViewModelCommand(ExecuteShowHomeViewCommand);
@@ -127,7 +105,7 @@ namespace CourseFlow.ViewModels
 
         private void ExecuteShowCourseFlowsheetViewCommand(object obj)
         {
-            CurrentChildView = new CourseFlowsheetViewModel(CurrentUser);
+            CurrentChildView = new CourseFlowsheetViewModel();
             Caption = "Course Flowsheet";
             Icon = FontAwesomeIcon.Table;
         }
@@ -145,12 +123,11 @@ namespace CourseFlow.ViewModels
 
             if (user != null)
             {
-                CurrentUserAccount.Username = user.Username;
-                CurrentUserAccount.DisplayName = $"{user.FirstName} {user.LastName}";
+                App.CurrentUser.Username = user.Username;
             }
             else
             {
-                CurrentUserAccount.DisplayName = "User not logged in";
+                throw new Exception("UnAuthorized Access!");
                 // Hide child views.
             }
         }

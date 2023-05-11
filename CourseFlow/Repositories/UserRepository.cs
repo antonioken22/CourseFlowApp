@@ -64,12 +64,13 @@ namespace CourseFlow.Repositories
                     {
                         user = new UserModel()
                         {
-                            Username = reader[1].ToString(),
+                            Username = reader["Username"].ToString(),
                             Password = string.Empty,
-                            FirstName = reader[3].ToString(),
-                            LastName = reader[4].ToString(),
-                            Email = reader[5].ToString(),
-                            Role = reader[6].ToString(),
+                            FirstName = reader["FirstName"].ToString(),
+                            LastName = reader["LastName"].ToString(),
+                            Email = reader["Email"].ToString(),
+                            Role = reader["Role"].ToString(),
+                            ProfilePicture = reader["ProfilePicture"].ToString()
                         };
                     }
                 }

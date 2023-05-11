@@ -18,7 +18,7 @@ namespace CourseFlow.Views
         public CourseFlowsheetView()
         {
             InitializeComponent();
-            this.DataContext = courseFlowsheetViewModel = new CourseFlowsheetViewModel(currentUser);
+            this.DataContext = courseFlowsheetViewModel = new CourseFlowsheetViewModel();
             this.Loaded += CourseFlowsheetView_Loaded;
         }
             
@@ -30,7 +30,9 @@ namespace CourseFlow.Views
         private void ButtonAddSubject_Clicked(object sender, EventArgs e)
         {
             SubjectsCRUDView subjectsCRUDView = new SubjectsCRUDView();
-            subjectsCRUDView.ShowDialog();
+            //subjectsCRUDView.OnSaveButtonClickedHandler += OnCrudViewClosed;
+            subjectsCRUDView.Closed += OnCrudViewClosed;
+            subjectsCRUDView.Show();
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -38,7 +40,15 @@ namespace CourseFlow.Views
             var dataContext = this.DataContext as CourseFlowsheetViewModel;
             var subject = dataContext.HoveredSubject;
             SubjectsCRUDView subjectsCRUDView = new SubjectsCRUDView(subject.Id);
-            subjectsCRUDView.ShowDialog();
+            //subjectsCRUDView.OnSaveButtonClickedHandler += OnCrudViewClosed;
+            subjectsCRUDView.Closed += OnCrudViewClosed;
+            subjectsCRUDView.Show();
+        }
+
+        private void OnCrudViewClosed(object sender, EventArgs e)
+        {
+            var dataContext = this.DataContext as CourseFlowsheetViewModel;
+            dataContext.LoadFlowsheetCommand.Execute(this);
         }
     }
 }

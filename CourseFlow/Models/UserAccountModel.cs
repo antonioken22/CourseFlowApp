@@ -1,9 +1,8 @@
 ﻿namespace CourseFlow.Models
 {
-    public class UserAccountModel : AuditableEntity
+    public class UserAccountModel : UserModel
     {
-        public string Username { get; set; }
-        public string DisplayName { get; set; }
+        public string DisplayName { get => $"{LastName}, {FirstName}"; }
         public byte[] ProfilePicture { get; set; }
     }
 }

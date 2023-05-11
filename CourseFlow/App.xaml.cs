@@ -5,6 +5,7 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using CourseFlow.Models;
 using CourseFlow.Views;
 
 namespace CourseFlow
@@ -14,6 +15,7 @@ namespace CourseFlow
     /// </summary>
     public partial class App : Application
     {
+        public static UserAccountModel CurrentUser { get; private set; }
         protected void ApplicationStart(object sender, StartupEventArgs e)
         {
             var loginView = new LoginView();
@@ -27,6 +29,17 @@ namespace CourseFlow
                     loginView.Close();
                 }
             };
+        }
+
+
+        public static void SignInUser(UserAccountModel userModel)
+        {
+            CurrentUser = userModel;
+        }
+
+        public static void SignOutUser()
+        {
+            CurrentUser = null;
         }
     }
 }

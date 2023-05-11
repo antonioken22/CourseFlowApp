@@ -1,4 +1,5 @@
 ﻿using CourseFlow.ViewModels.FlowsheetCRUDViewModels;
+using System;
 using System.Windows;
 using System.Windows.Media;
 
@@ -13,6 +14,8 @@ namespace CourseFlow.Views.FlowsheetCRUD
 
         private readonly int? selectedSubject;
 
+        public EventHandler OnSaveButtonClickedHandler;
+
         public SubjectsCRUDView()
         {
             InitializeComponent();
@@ -24,23 +27,25 @@ namespace CourseFlow.Views.FlowsheetCRUD
         {
             InitializeComponent();
             this.selectedSubject = selectedSubject;
-            this.DataContext = subjectsCRUDViewModel = new SubjectsCRUDViewModel(selectedSubject);
+            this.DataContext = subjectsCRUDViewModel = new SubjectsCRUDViewModel();
             this.Loaded += SubjectsCRUDView_Loaded;
+            this.selectedSubject = selectedSubject;
+            
         }
 
         private void SubjectsCRUDView_Loaded(object sender, RoutedEventArgs e)
         {
             subjectsCRUDViewModel.OnWindowLoadCommand.Execute(this);
-            if (this.selectedSubject != null)
+            var temp = this.DataContext as SubjectsCRUDViewModel;
+            if(selectedSubject.HasValue && temp != null)
             {
-                var isLoaded = subjectsCRUDViewModel.LoadSelectedSubjects(selectedSubject.Value);
-
-                if (!isLoaded)
+                if (!temp.LoadSelectedSubject(selectedSubject.Value))
                 {
                     MessageBox.Show("Cannot find the Subject in the Database.");
                     this.Close();
                 }
             }
+           
         }
 
         private void Cancel_Clicked(object sender, RoutedEventArgs e)
@@ -61,5 +66,6 @@ namespace CourseFlow.Views.FlowsheetCRUD
             Application.Current.Resources["ControlBackground"] = SystemColors.ControlBrush;
             Application.Current.Resources["ControlForeground"] = SystemColors.ControlTextBrush;
         }
+
     }
 }

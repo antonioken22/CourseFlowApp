@@ -236,7 +236,7 @@ namespace CourseFlow.ViewModels.FlowsheetCRUDViewModels
                 return;
             }
             var subjectsByCourseAndAcademicYear = _subjectRepository.GetSubjectsByCourseAndAcademicYear(SelectedCourse, SelectedAcademicYear);
-            Subjects = new ObservableCollection<SubjectModel>(subjectsByCourseAndAcademicYear);
+            Subjects = new ObservableCollection<SubjectModel>(subjectsByCourseAndAcademicYear.OrderBy(s => s.SubjectCode));
             OnPropertyChanged(nameof(Subjects));
         }
 
@@ -284,7 +284,7 @@ namespace CourseFlow.ViewModels.FlowsheetCRUDViewModels
                     SubjectCode = String.Empty;
                     SubjectName = String.Empty;
                 }
-                else
+                else if (SelectedSubject != null)
                 {
                     subject.Id = SelectedSubject.Id;
                     _subjectRepository.Edit(subject);
@@ -293,7 +293,7 @@ namespace CourseFlow.ViewModels.FlowsheetCRUDViewModels
                 foreach (var subjectRelationship in SubjectRelationships)
                 {
                     subjectRelationship.SubjectID = subject.Id;
-                    _subjectRelationshipRepository.Add(subjectRelationship);
+                    _subjectRelationshipRepository.AddOrEdit(subjectRelationship);
                 }
                 
                 MessageBox.Show("Successfully saved!");

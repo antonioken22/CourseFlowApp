@@ -57,17 +57,7 @@ namespace CourseFlow.Repositories
 
         public void Add(SubjectRelationshipModel subjectRelationshipModel)
         {
-            using (var connection = GetConnection())
-            {
-                connection.Open();
-                using (var command = new OleDbCommand("INSERT INTO SubjectRelationships (SubjectID, RelatedSubjectID, RelationshipTypeID) VALUES (@subjectID, @relatedSubjectID, @relationshipTypeID)", connection))
-                {
-                    command.Parameters.AddWithValue("@subjectID", subjectRelationshipModel.SubjectID);
-                    command.Parameters.AddWithValue("@relatedSubjectID", subjectRelationshipModel.RelatedSubjectID);
-                    command.Parameters.AddWithValue("@relationshipTypeID", subjectRelationshipModel.RelationshipTypeID);
-                    command.ExecuteNonQuery();
-                }
-            }
+            throw new NotImplementedException();
         }
 
         public void Edit(SubjectRelationshipModel subjectRelationshipModel)

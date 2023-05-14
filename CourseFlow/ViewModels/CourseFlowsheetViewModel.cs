@@ -241,7 +241,7 @@ namespace CourseFlow.ViewModels
                 var semesterData = new SemesterData { Semester = semester };
                 semesterData.Subjects = new ObservableCollection<SubjectModel>();
 
-                var subjects = subjectsByYearLevelCourseAndAcademicYear.Where(s => s.SemesterID == semester.Id).ToList();
+                var subjects = subjectsByYearLevelCourseAndAcademicYear.Where(s => s.SemesterID == semester.Id).OrderBy(s => s.SubjectCode).ToList();
                 foreach (var subject in subjects)
                 {
                     semesterData.Subjects.Add(subject);

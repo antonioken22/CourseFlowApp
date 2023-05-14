@@ -78,6 +78,19 @@ namespace CourseFlow.Repositories
             }
         }
 
+        public void RemoveBySubjectId(int subjectId)
+        {
+            using (var connection = GetConnection())
+            {
+                connection.Open();
+                using (var command = new OleDbCommand("DELETE FROM SubjectRelationships WHERE SubjectID = @subjectID", connection))
+                {
+                    command.Parameters.AddWithValue("@subjectID", subjectId);
+                    command.ExecuteNonQuery();
+                }
+            }
+        }
+
         public SubjectRelationshipModel GetById(int id)
         {
             throw new NotImplementedException();

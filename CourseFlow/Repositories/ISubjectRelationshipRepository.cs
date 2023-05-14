@@ -9,6 +9,7 @@ namespace CourseFlow.Repositories
         void Add(SubjectRelationshipModel subjectRelationshipModel);
         void Edit(SubjectRelationshipModel subjectRelationshipModel);
         void Remove(int id);
+        void RemoveBySubjectId(int subjectId);
         SubjectRelationshipModel GetById(int id);
         IEnumerable<SubjectRelationshipModel> GetAll();
         public List<SubjectRelationshipModel> GetSubjectRelationshipsBySubject(int id);

@@ -68,7 +68,7 @@ namespace CourseFlow.ViewModels
         public ICommand SubjectMouseEnterCommand { get; }
         public ICommand SubjectMouseLeaveCommand { get; }
 
-        public ICommand RemoveSubjectCommand { get; }
+        public ICommand RemoveSubjectAndItsRelationshipCommand { get; }
 
 
 
@@ -103,20 +103,21 @@ namespace CourseFlow.ViewModels
             SubjectMouseEnterCommand = new ViewModelCommand(param => OnSubjectMouseEnter(param as SubjectModel));
             SubjectMouseLeaveCommand = new ViewModelCommand(param => OnSubjectMouseLeave());
 
-            RemoveSubjectCommand = new ViewModelCommand(param => RemoveSubject(param as SubjectModel));
+            RemoveSubjectAndItsRelationshipCommand = new ViewModelCommand(param => RemoveSubjectAndItsRelationship(param as SubjectModel));
             App.CurrentUser.Role = "Admin";
 
         }
 
         // Edit and Remove
-        private void RemoveSubject(SubjectModel subject)
+        private void RemoveSubjectAndItsRelationship(SubjectModel subject)
         {
-            if(MessageBox.Show("Are you sure you want to Delete this Subject?", caption: $"Removing {subject.SubjectCode} {subject.SubjectName}", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+            if(MessageBox.Show("Are you sure you want to Delete this Subject and its Relationships?", caption: $"Removing {subject.SubjectCode} {subject.SubjectName} and its Relationships.", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
             {
                 try
                 {
+                    _subjectRelationshipRepository.RemoveBySubjectId(subject.Id);
                     _subjectRepository.Remove(subject.Id);
-                    MessageBox.Show($"Successfully Removed the Subject: {subject.SubjectCode} {subject.SubjectName}");
+                    MessageBox.Show($"Successfully Removed the Subject and its Relationships?: {subject.SubjectCode} {subject.SubjectName}");
                     LoadFlowsheet();
                 }
                 catch (Exception e)

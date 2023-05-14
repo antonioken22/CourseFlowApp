@@ -18,17 +18,20 @@ namespace CourseFlow.Views.FlowsheetCRUD
         public SubjectsCRUDView()
         {
             InitializeComponent();
-            this.DataContext = subjectsCRUDViewModel = new SubjectsCRUDViewModel();
+            subjectsCRUDViewModel = new SubjectsCRUDViewModel();
+            this.DataContext = subjectsCRUDViewModel;
             this.Loaded += SubjectsCRUDView_Loaded;
         }
 
         public SubjectsCRUDView(int selectedSubject)
         {
             InitializeComponent();
+            subjectsCRUDViewModel = new SubjectsCRUDViewModel();
             this.selectedSubject = selectedSubject;
-            this.DataContext = subjectsCRUDViewModel = new SubjectsCRUDViewModel();
+            this.DataContext = subjectsCRUDViewModel;
             this.Loaded += SubjectsCRUDView_Loaded;
         }
+
 
         private void SubjectsCRUDView_Loaded(object sender, RoutedEventArgs e)
         {
@@ -42,7 +45,6 @@ namespace CourseFlow.Views.FlowsheetCRUD
                     this.Close();
                 }
             }
-           
         }
 
         private void Cancel_Clicked(object sender, RoutedEventArgs e)

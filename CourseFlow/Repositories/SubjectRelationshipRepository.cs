@@ -91,6 +91,31 @@ namespace CourseFlow.Repositories
             }
         }
 
+        public void RemoveBySubjectIdAndRelatedSubjectCode(int subjectId, object parameter)
+        {
+            using (var connection = GetConnection())
+            {
+                connection.Open();
+                using (var command = new OleDbCommand("SELECT * FROM Subjects WHERE SubjectCode = @subjectCode", connection))
+                {
+                    command.Parameters.AddWithValue("@subjectCode", parameter);
+                    using (var reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            var relatedSubjectId = Convert.ToInt32(reader["SubjectID"]);
+                            using (var command2 = new OleDbCommand("DELETE FROM SubjectRelationships WHERE SubjectID = @subjectID AND RelatedSubjectID = @relatedSubjectID", connection))
+                            {
+                                command2.Parameters.AddWithValue("@subjectID", subjectId);
+                                command2.Parameters.AddWithValue("@relatedSubjectID", relatedSubjectId);
+                                command2.ExecuteNonQuery();
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         public SubjectRelationshipModel GetById(int id)
         {
             throw new NotImplementedException();

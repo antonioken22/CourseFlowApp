@@ -73,7 +73,8 @@
                                 </Grid.ColumnDefinitions>
                                 <Label Grid.Column="0" Content="{Binding RelationshipType.RelationshipType}" HorizontalContentAlignment="Center"/>
                                 <Label Grid.Column="1" Content="{Binding RelatedSubject.SubjectCode}" HorizontalContentAlignment="Center"/>
-                                <Button Grid.Column="2" Content="Remove Relationship" Command="{Binding DataContext.RemoveRelationshipCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" CommandParameter="{Binding}" Width="120" Margin="5,0"/>
+                                <Button Grid.Column="2" Content="Remove Relationship" Command="{Binding DataContext.RemoveRelationshipCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" CommandParameter="{Binding RelatedSubject.SubjectCode}" Width="120" Margin="5,0"/>
+
                             </Grid>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
@@ -86,7 +87,7 @@
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
                     <ComboBox Grid.Column="0" Width="125" Margin="5" ItemsSource="{Binding RelationshipTypes, Mode=TwoWay}" DisplayMemberPath="RelationshipType" SelectedItem="{Binding SelectedRelationshipType}"/>
-                    <ComboBox Grid.Column="1" Width="125" Margin="5" ItemsSource="{Binding Subjects, Mode=TwoWay}" DisplayMemberPath="SubjectCode" SelectedItem="{Binding SelectedSubject}"/>
+                    <ComboBox Grid.Column="1" Width="125" Margin="5" ItemsSource="{Binding Subjects, Mode=TwoWay}" DisplayMemberPath="SubjectCode" SelectedItem="{Binding SelectedRelatedSubject}"/>
                 </Grid>
 
                 <StackPanel Grid.Row="16">

@@ -35,7 +35,7 @@ namespace CourseFlow.Views
             subjectsCRUDView.Show();
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void ButtonEditSubject_Clicked(object sender, RoutedEventArgs e)
         {
             var dataContext = this.DataContext as CourseFlowsheetViewModel;
             var subject = dataContext.HoveredSubject;

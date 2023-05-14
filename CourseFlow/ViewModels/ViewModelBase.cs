@@ -1,5 +1,4 @@
-﻿using CourseFlow.Models;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
 namespace CourseFlow.ViewModels

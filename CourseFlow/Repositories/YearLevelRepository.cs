@@ -21,10 +21,9 @@ namespace CourseFlow.Repositories
             throw new NotImplementedException();
         }
 
-
         public YearLevelModel GetById(int id)
         {
-            using (var connection = new OleDbConnection(_connectionString))
+            using (var connection = GetConnection())
             {
                 connection.Open();
 

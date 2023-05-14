@@ -1,5 +1,4 @@
-﻿using CourseFlow.Models;
-using CourseFlow.Repositories;
+﻿using CourseFlow.Repositories;
 using System.Threading;
 using FontAwesome.WPF;
 using System.Windows.Input;
@@ -7,7 +6,7 @@ using System;
 
 namespace CourseFlow.ViewModels
 {
-    public class MainWindowModel : ViewModelBase
+    public class MainWindowViewModel : ViewModelBase
     {
         // Fields
         private ViewModelBase _currentChildView;
@@ -57,7 +56,7 @@ namespace CourseFlow.ViewModels
         public ICommand ShowLogoutViewCommand { get; }
 
 
-        public MainWindowModel()
+        public MainWindowViewModel()
         {
             userRepository = new UserRepository();
 

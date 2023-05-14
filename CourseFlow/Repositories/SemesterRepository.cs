@@ -51,30 +51,5 @@ namespace CourseFlow.Repositories
 
             return semesters;
         }
-
-        public IEnumerable<SemesterModel> GetByYearLevelId(int id)
-        {
-            var semesters = new List<SemesterModel>();
-            using (var connection = GetConnection())
-            {
-                connection.Open();
-                using (var command = new OleDbCommand("SELECT * FROM Semesters WHERE ", connection))
-                {
-                    using (var reader = command.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            semesters.Add(new SemesterModel
-                            {
-                                Id = Convert.ToInt32(reader["SemesterID"]),
-                                Semester = reader["Semester"].ToString(),
-                            });
-                        }
-                    }
-                }
-            }
-
-            return semesters;
-        }
     }
 }

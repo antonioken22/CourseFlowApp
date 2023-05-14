@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows;
-using CourseFlow.Models;
+﻿using CourseFlow.Models;
 using CourseFlow.Views;
+using System.Windows;
 
 namespace CourseFlow
 {
@@ -24,8 +18,8 @@ namespace CourseFlow
             {
                 if (loginView.IsVisible == false && loginView.IsLoaded)
                 {
-                    var mainWindow = new MainWindow();
-                    mainWindow.Show();
+                    var mainWindowView = new MainWindowView();
+                    mainWindowView.Show();
                     loginView.Close();
                 }
             };

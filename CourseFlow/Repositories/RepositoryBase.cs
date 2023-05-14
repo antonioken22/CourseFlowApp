@@ -9,7 +9,7 @@ namespace CourseFlow.Repositories
         public RepositoryBase()
         {
             // _connectionString = "Server=(local) ; Database = CourseFlow; Integrated Security=true";
-            _connectionString = ConfigurationManager.ConnectionStrings["CourseFlowZ"].ConnectionString;
+            _connectionString = ConfigurationManager.ConnectionStrings["CourseFlow"].ConnectionString;
         }
 
         protected OleDbConnection GetConnection()

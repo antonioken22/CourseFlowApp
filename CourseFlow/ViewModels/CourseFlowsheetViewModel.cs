@@ -252,7 +252,7 @@ namespace CourseFlow.ViewModels
         }
 
         // Role Authority
-        public Visibility AddSubjectButtonVisibility
+        public Visibility ButtonVisibility
         {
             get
             {

@@ -40,45 +40,12 @@ namespace CourseFlow.Repositories
             }
         }
 
-        public IEnumerable<SubjectRelationshipModel> GetAll()
-        {
-            throw new NotImplementedException();
-        }
-
         public SubjectRelationshipModel GetById(int id)
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<SubjectRelationshipModel> GetBySubjectID(int subjectID)
-        {
-            using (var connection = GetConnection())
-            {
-                connection.Open();
-                using (var command = new OleDbCommand("SELECT * FROM SubjectRelationships WHERE SubjectID = @subjectId", connection))
-                {
-                    command.Parameters.AddWithValue("@subjectId", subjectID);
-                    using (var reader = command.ExecuteReader())
-                    {
-                        var subjectRelationships = new List<SubjectRelationshipModel>();
-                        while (reader.Read())
-                        {
-                            var subjectRelationship = new SubjectRelationshipModel
-                            {
-                                Id = Convert.ToInt32(reader["RelationshipID"]),
-                                SubjectID = Convert.ToInt32(reader["SubjectID"]),
-                                RelatedSubjectID = Convert.ToInt32(reader["RelatedSubjectID"]),
-                                RelationshipTypeID = Convert.ToInt32(reader["RelationshipTypeID"])
-                            };
-                            subjectRelationships.Add(subjectRelationship);
-                        }
-                        return subjectRelationships;
-                    }
-                }
-            }
-        }
-
-        public List<SubjectRelationshipModel> GetRelatedSubjects(SubjectModel subject)
+        public IEnumerable<SubjectRelationshipModel> GetAll()
         {
             throw new NotImplementedException();
         }

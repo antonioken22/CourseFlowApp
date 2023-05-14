@@ -111,13 +111,13 @@ namespace CourseFlow.ViewModels
         // Edit and Remove
         private void RemoveSubjectAndItsRelationship(SubjectModel subject)
         {
-            if(MessageBox.Show("Are you sure you want to Delete this Subject and its Relationships?", caption: $"Removing {subject.SubjectCode} {subject.SubjectName} and its Relationships.", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+            if (MessageBox.Show("Are you sure you want to Delete this Subject and its Relationships?", caption: $"Removing {subject.SubjectCode} {subject.SubjectName} and its Relationships.", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
             {
                 try
                 {
                     _subjectRelationshipRepository.RemoveBySubjectId(subject.Id);
                     _subjectRepository.Remove(subject.Id);
-                    MessageBox.Show($"Successfully Removed the Subject and its Relationships?: {subject.SubjectCode} {subject.SubjectName}");
+                    MessageBox.Show($"Successfully Removed the Subject and its Relationships: {subject.SubjectCode} {subject.SubjectName}");
                     LoadFlowsheet();
                 }
                 catch (Exception e)

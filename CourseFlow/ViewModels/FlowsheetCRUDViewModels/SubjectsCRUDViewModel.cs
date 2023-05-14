@@ -162,6 +162,8 @@ namespace CourseFlow.ViewModels.FlowsheetCRUDViewModels
             SubjectCode = _selectedSubject.SubjectCode;
             SubjectName = _selectedSubject.SubjectName;
 
+            OnPropertyChanged(nameof(SelectedSubject));
+
             var subjectRelationships = _subjectRelationshipRepository.GetSubjectRelationshipsBySubject(id);
             foreach (var subjectRelationship in subjectRelationships)
             {
@@ -264,36 +266,40 @@ namespace CourseFlow.ViewModels.FlowsheetCRUDViewModels
             SelectedSubject = null;
         }
 
-
         // Save Button Methods
         private void SaveAll()
         {
             try
             {
-                SubjectModel subject = new SubjectModel();
-                subject.CourseID = SelectedCourse.Id;
-                subject.AcademicYearID = SelectedAcademicYear.Id;
-                subject.YearLevelID = YearLevel;
-                subject.SemesterID = Semester;
-                subject.SubjectCode = SubjectCode;
-                subject.SubjectName = SubjectName;
-
-                if (SelectedSubject == null)
+                if (SelectedSubject != null)
                 {
+                    _subjectRepository.Edit(SelectedSubject);
+
+                    foreach (var subjectRelationship in SubjectRelationships)
+                    {
+                        subjectRelationship.SubjectID = SelectedSubject.Id;
+                        _subjectRelationshipRepository.AddOrEdit(subjectRelationship);
+                    }
+                }
+                else 
+                {
+                    SubjectModel subject = new SubjectModel();
+                    subject.CourseID = SelectedCourse.Id;
+                    subject.AcademicYearID = SelectedAcademicYear.Id;
+                    subject.YearLevelID = YearLevel;
+                    subject.SemesterID = Semester;
+                    subject.SubjectCode = SubjectCode;
+                    subject.SubjectName = SubjectName;
+
                     _subjectRepository.Add(subject);
                     SubjectCode = String.Empty;
                     SubjectName = String.Empty;
-                }
-                else if (SelectedSubject != null)
-                {
-                    subject.Id = SelectedSubject.Id;
-                    _subjectRepository.Edit(subject);
-                }
 
-                foreach (var subjectRelationship in SubjectRelationships)
-                {
-                    subjectRelationship.SubjectID = subject.Id;
-                    _subjectRelationshipRepository.AddOrEdit(subjectRelationship);
+                    foreach (var subjectRelationship in SubjectRelationships)
+                    {
+                        subjectRelationship.SubjectID = subject.Id;
+                        _subjectRelationshipRepository.AddOrEdit(subjectRelationship);
+                    }
                 }
                 
                 MessageBox.Show("Successfully saved!");

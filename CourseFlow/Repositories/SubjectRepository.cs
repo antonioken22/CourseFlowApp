@@ -34,7 +34,7 @@ namespace CourseFlow.Repositories
             using (var connection = GetConnection())
             {
                 connection.Open();
-                using (var command = new OleDbCommand("UPDATE Subjects SET SubjectCode = @subjectCode, SubjectName = @subjectName, CourseID = @courseID, AcademicYearID = @academicYearID, YearLevelID = @yearLevelID, SemesterID = @semesterID WHERE Id = @id", connection))
+                using (var command = new OleDbCommand("UPDATE Subjects SET SubjectCode = @subjectCode, SubjectName = @subjectName, CourseID = @courseID, AcademicYearID = @academicYearID, YearLevelID = @yearLevelID, SemesterID = @semesterID WHERE SubjectID = @subjectID", connection))
                 {
                     command.Parameters.AddWithValue("@subjectCode", subjectModel.SubjectCode);
                     command.Parameters.AddWithValue("@subjectName", subjectModel.SubjectName);
@@ -42,7 +42,7 @@ namespace CourseFlow.Repositories
                     command.Parameters.AddWithValue("@academicYearID", subjectModel.AcademicYearID);
                     command.Parameters.AddWithValue("@yearLevelID", subjectModel.YearLevelID);
                     command.Parameters.AddWithValue("@semesterID", subjectModel.SemesterID);
-                    command.Parameters.AddWithValue("@id", subjectModel.Id);
+                    command.Parameters.AddWithValue("@subjectID", subjectModel.Id);
                     command.ExecuteNonQuery();
                 }
             }

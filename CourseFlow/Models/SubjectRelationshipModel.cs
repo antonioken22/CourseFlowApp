@@ -5,8 +5,6 @@
         public int? SubjectID { get; set; }
         public int RelatedSubjectID { get; set; }
         public int RelationshipTypeID { get; set; }
-        public bool IsRemoved { get; set; }
-
 
         // Navigation properties
         public SubjectModel Subject { get; set; }

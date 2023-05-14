@@ -7,6 +7,54 @@ namespace CourseFlow.Repositories
 {
     public class SubjectRelationshipRepository : RepositoryBase, ISubjectRelationshipRepository
     {
+        public bool Exists(SubjectRelationshipModel subjectRelationshipModel)
+        {
+            using (var connection = GetConnection())
+            {
+                connection.Open();
+                using (var command = new OleDbCommand("SELECT COUNT(*) FROM SubjectRelationships WHERE SubjectID = @subjectID AND RelatedSubjectID = @relatedSubjectID AND RelationshipTypeID = @relationshipTypeID", connection))
+                {
+                    command.Parameters.AddWithValue("@subjectID", subjectRelationshipModel.SubjectID);
+                    command.Parameters.AddWithValue("@relatedSubjectID", subjectRelationshipModel.RelatedSubjectID);
+                    command.Parameters.AddWithValue("@relationshipTypeID", subjectRelationshipModel.RelationshipTypeID);
+                    var count = (int)command.ExecuteScalar();
+                    return count > 0;
+                }
+            }
+        }
+
+        public void AddOrEdit(SubjectRelationshipModel subjectRelationshipModel)
+        {
+            if (!Exists(subjectRelationshipModel))
+            {
+                using (var connection = GetConnection())
+                {
+                    connection.Open();
+                    using (var command = new OleDbCommand("INSERT INTO SubjectRelationships (SubjectID, RelatedSubjectID, RelationshipTypeID) VALUES (@subjectID, @relatedSubjectID, @relationshipTypeID)", connection))
+                    {
+                        command.Parameters.AddWithValue("@subjectID", subjectRelationshipModel.SubjectID);
+                        command.Parameters.AddWithValue("@relatedSubjectID", subjectRelationshipModel.RelatedSubjectID);
+                        command.Parameters.AddWithValue("@relationshipTypeID", subjectRelationshipModel.RelationshipTypeID);
+                        command.ExecuteNonQuery();
+                    }
+                }
+            }
+            else
+            {
+                using (var connection = GetConnection())
+                {
+                    connection.Open();
+                    using (var command = new OleDbCommand("UPDATE SubjectRelationships SET SubjectID = @subjectID, RelatedSubjectID = @relatedSubjectID, RelationshipTypeID = @relationshipTypeID WHERE SubjectID = @subjectID AND RelatedSubjectID = @relatedSubjectID AND RelationshipTypeID = @relationshipTypeID", connection))
+                    {
+                        command.Parameters.AddWithValue("@subjectID", subjectRelationshipModel.SubjectID);
+                        command.Parameters.AddWithValue("@relatedSubjectID", subjectRelationshipModel.RelatedSubjectID);
+                        command.Parameters.AddWithValue("@relationshipTypeID", subjectRelationshipModel.RelationshipTypeID);
+                        command.ExecuteNonQuery();
+                    }
+                }
+            }
+        }
+
         public void Add(SubjectRelationshipModel subjectRelationshipModel)
         {
             using (var connection = GetConnection())

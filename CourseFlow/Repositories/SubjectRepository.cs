@@ -48,7 +48,6 @@ namespace CourseFlow.Repositories
             }
         }
 
-
         public void Remove(int id)
         {
             using (var connection = GetConnection())

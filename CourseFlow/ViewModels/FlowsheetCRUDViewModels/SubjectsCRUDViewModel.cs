@@ -145,7 +145,6 @@ namespace CourseFlow.ViewModels.FlowsheetCRUDViewModels
             SubjectRelationships = new ObservableCollection<SubjectRelationshipModel>();
         }
 
-
         // Edit Button Methods
         public bool LoadSelectedSubject(int id)
         {
@@ -175,8 +174,6 @@ namespace CourseFlow.ViewModels.FlowsheetCRUDViewModels
             return true;
         }
 
-        // TODO - Make the RemoveRelationship method work   
-
         public void RemoveRelationship(SubjectRelationshipModel relationship)
         {
             if (relationship.RelatedSubject == null)
@@ -187,7 +184,6 @@ namespace CourseFlow.ViewModels.FlowsheetCRUDViewModels
 
             if (MessageBox.Show("Are you sure you want to remove this relationship?", $"Removing relationship between {relationship.RelatedSubject.SubjectCode}", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
             {
-                relationship.IsRemoved = true;
                 SubjectRelationships.Remove(relationship);
                 OnPropertyChanged(nameof(SubjectRelationships));
             }
@@ -282,7 +278,17 @@ namespace CourseFlow.ViewModels.FlowsheetCRUDViewModels
                 subject.SubjectCode = SubjectCode;
                 subject.SubjectName = SubjectName;
 
-                _subjectRepository.Add(subject);
+                if (SelectedSubject == null)
+                {
+                    _subjectRepository.Add(subject);
+                    SubjectCode = String.Empty;
+                    SubjectName = String.Empty;
+                }
+                else
+                {
+                    subject.Id = SelectedSubject.Id;
+                    _subjectRepository.Edit(subject);
+                }
 
                 foreach (var subjectRelationship in SubjectRelationships)
                 {
@@ -291,8 +297,7 @@ namespace CourseFlow.ViewModels.FlowsheetCRUDViewModels
                 }
                 
                 MessageBox.Show("Successfully saved!");
-                SubjectCode = String.Empty;
-                SubjectName = String.Empty;
+                
                 SubjectRelationships.Clear();
                 OnPropertyChanged(nameof(SubjectRelationships));
                 LoadSubjects();

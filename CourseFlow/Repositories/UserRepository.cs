@@ -51,29 +51,37 @@ namespace CourseFlow.Repositories
         public UserModel GetByUsername(string UserName)
         {
             UserModel user = null;
-            using (var connection = new OleDbConnection(_connectionString))
-            using (var command = new OleDbCommand())
+            try
             {
-                connection.Open();
-                command.Connection = connection;
-                command.CommandText = "SELECT * FROM [User] WHERE Username = @Username";
-                command.Parameters.AddWithValue("@Username", UserName);
-                using (var reader = command.ExecuteReader())
+                using (var connection = new OleDbConnection(_connectionString))
+                using (var command = new OleDbCommand())
                 {
-                    if (reader.Read())
+                    connection.Open();
+                    command.Connection = connection;
+                    command.CommandText = "SELECT * FROM [User] WHERE Username = @Username";
+                    command.Parameters.AddWithValue("@Username", UserName);
+                    using (var reader = command.ExecuteReader())
                     {
-                        user = new UserModel()
+                        if (reader.Read())
                         {
-                            Username = reader["Username"].ToString(),
-                            Password = string.Empty,
-                            FirstName = reader["FirstName"].ToString(),
-                            LastName = reader["LastName"].ToString(),
-                            Email = reader["Email"].ToString(),
-                            Role = reader["Role"].ToString(),
-                            ProfilePicture = reader["ProfilePicture"].ToString()
-                        };
+                            user = new UserModel()
+                            {
+                                Username = reader["Username"].ToString(),
+                                Password = string.Empty,
+                                FirstName = reader["FirstName"].ToString(),
+                                LastName = reader["LastName"].ToString(),
+                                Email = reader["Email"].ToString(),
+                                Role = reader["Role"].ToString(),
+                                ProfilePicture = reader["ProfilePicture"].ToString()
+                            };
+                        }
                     }
                 }
+            }
+            catch (Exception ex)
+            {
+                // Log error or throw exception as per your requirement
+                throw new Exception("An error occurred while retrieving the user by username.", ex);
             }
             return user;
         }

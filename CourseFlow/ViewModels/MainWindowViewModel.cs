@@ -3,6 +3,7 @@ using System.Threading;
 using FontAwesome.WPF;
 using System.Windows.Input;
 using System;
+using CourseFlow.Models;
 
 namespace CourseFlow.ViewModels
 {
@@ -17,8 +18,10 @@ namespace CourseFlow.ViewModels
 
         // Properties
 
-        public ViewModelBase CurrentChildView 
-        { 
+        public UserAccountModel CurrentUserAccount { get; set; }
+
+        public ViewModelBase CurrentChildView
+        {
             get { return _currentChildView; }
             set
             {
@@ -27,9 +30,9 @@ namespace CourseFlow.ViewModels
             }
         }
 
-        public string Caption 
-        { 
-            get => _caption; 
+        public string Caption
+        {
+            get => _caption;
             set
             {
                 _caption = value;
@@ -37,9 +40,9 @@ namespace CourseFlow.ViewModels
             }
         }
 
-        public FontAwesomeIcon Icon 
-        { 
-            get => _icon; 
+        public FontAwesomeIcon Icon
+        {
+            get => _icon;
             set
             {
                 _icon = value;
@@ -59,8 +62,9 @@ namespace CourseFlow.ViewModels
         public MainWindowViewModel()
         {
             userRepository = new UserRepository();
+            CurrentUserAccount = new UserAccountModel();
 
-            // LoadCurrentUserData();
+            LoadCurrentUserData();
 
             // Initialize Commands
             ShowHomeViewCommand = new ViewModelCommand(ExecuteShowHomeViewCommand);
@@ -104,6 +108,7 @@ namespace CourseFlow.ViewModels
 
         private void ExecuteShowCourseFlowsheetViewCommand(object obj)
         {
+            App.SignInUser(CurrentUserAccount);
             CurrentChildView = new CourseFlowsheetViewModel();
             Caption = "Course Flowsheet";
             Icon = FontAwesomeIcon.Table;
@@ -122,7 +127,11 @@ namespace CourseFlow.ViewModels
 
             if (user != null)
             {
-                App.CurrentUser.Username = user.Username;
+                CurrentUserAccount.FirstName = user.FirstName;
+                CurrentUserAccount.LastName = user.LastName;
+                CurrentUserAccount.ProfilePicture = user.ProfilePicture;
+                CurrentUserAccount.Role = user.Role;
+                App.SignInUser(CurrentUserAccount);
             }
             else
             {
@@ -130,5 +139,5 @@ namespace CourseFlow.ViewModels
                 // Hide child views.
             }
         }
-    }
+    }   
 }

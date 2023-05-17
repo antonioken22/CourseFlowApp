@@ -75,7 +75,6 @@ namespace CourseFlow.ViewModels
         // Constructors
         public CourseFlowsheetViewModel()
         {
-
             _courseRepository = new CourseRepository();
             _academicYearRepository = new AcademicYearRepository();
             _yearLevelRepository = new YearLevelRepository();
@@ -104,8 +103,6 @@ namespace CourseFlow.ViewModels
             SubjectMouseLeaveCommand = new ViewModelCommand(param => OnSubjectMouseLeave());
 
             RemoveSubjectAndItsRelationshipCommand = new ViewModelCommand(param => RemoveSubjectAndItsRelationship(param as SubjectModel));
-            App.CurrentUser.Role = "Admin";
-
         }
 
         // Edit and Remove

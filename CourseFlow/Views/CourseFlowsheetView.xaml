@@ -59,11 +59,13 @@
                 <Button Content="Load Flowsheet" Command="{Binding LoadFlowsheetCommand}" Padding="10,0"/>
             </StackPanel>
 
-            <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Right" Grid.Column="2">
+            <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Right" Grid.Column="1">
                 <Button Content="Add Subjects" Click="ButtonAddSubject_Clicked" Margin="0,0,5,0" Padding="10,0"
-                        Visibility="{Binding ButtonVisibility}"/>
+            Visibility="{Binding ButtonVisibility}"/>
+                <CheckBox Content="Edit Mode" IsChecked="{Binding IsEditMode}" Margin="0,0,10,0" Foreground="White"/>
 
             </StackPanel>
+
         </Grid>
 
         <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
@@ -110,8 +112,8 @@
                                                                     </i:Interaction.Triggers>
                                                                     
                                                                     <StackPanel>
-                                                                        <!--<Button Content="Edit" Click="ButtonEditSubject_Clicked"  Margin="0,0,5,0" Padding="10,0" Visibility="{Binding DataContext.ButtonVisibility, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"/>-->
-                                                                        <!--<Button Content="Remove" Visibility="{Binding DataContext.ButtonVisibility, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" Command="{Binding DataContext.RemoveSubjectAndItsRelationshipCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" CommandParameter="{Binding}" Margin="0,0,5,0" Padding="10,0"/>-->
+                                                                        <Button Content="Edit" Click="ButtonEditSubject_Clicked"  Margin="0,0,5,0" Padding="10,0" Visibility="{Binding DataContext.ButtonVisibility, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"/>
+                                                                        <Button Content="Remove" Visibility="{Binding DataContext.ButtonVisibility, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" Command="{Binding DataContext.RemoveSubjectAndItsRelationshipCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" CommandParameter="{Binding}" Margin="0,0,5,0" Padding="10,0"/>
 
                                                                         <TextBlock Text="{Binding SubjectName}" FontSize="12" Margin="5" HorizontalAlignment="Left">
                                                                             <TextBlock.Style>

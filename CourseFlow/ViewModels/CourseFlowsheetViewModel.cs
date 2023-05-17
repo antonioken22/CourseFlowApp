@@ -253,11 +253,30 @@ namespace CourseFlow.ViewModels
         }
 
         // Role Authority
+        private bool _isEditMode;
+        public bool IsEditMode
+        {
+            get { return _isEditMode; }
+            set
+            {
+                _isEditMode = value;
+                OnPropertyChanged(nameof(IsEditMode));
+                OnPropertyChanged(nameof(ButtonVisibility));
+            }
+        }
+
         public Visibility ButtonVisibility
         {
             get
             {
-                return App.CurrentUser?.Role == "Admin" ? Visibility.Visible : Visibility.Collapsed;
+                if (IsEditMode && App.CurrentUser?.Role == "Admin")
+                {
+                    return Visibility.Visible;
+                }
+                else
+                {
+                    return Visibility.Collapsed;
+                }
             }
         }
     }

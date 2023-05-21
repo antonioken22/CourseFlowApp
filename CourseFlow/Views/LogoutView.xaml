@@ -3,10 +3,52 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:CourseFlow.Views"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <Image Source="/Images/FeatureNotYetAvailable.png"/>
+        <Image Source="/Images/LogOutView.png"/>
+        
+        <Button x:Name="btnLogOut"
+                            Click ="btnLogOut_Click"
+                            BorderThickness="0"
+                            Content="LOGOUT"
+                            Foreground="White"
+                            FontSize="12"
+                            Cursor="Hand"
+                            Grid.Column="2"
+                            Margin="0,50,0,0"
+                            Width="200" Height="80">
+
+            <Button.Style>
+                <Style TargetType="Button">
+                    <Setter Property="Background" Value="#FF5D171B"/>
+                    <Style.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True" >
+                            <Setter Property="Background" Value="#FF5F2A2B"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </Button.Style>
+
+            <Button.Template>
+                <ControlTemplate TargetType="Button">
+                    <Border Width="150" 
+                    Height="40"
+                    CornerRadius="20"
+                    Background="{TemplateBinding Background}"
+                    BorderThickness="4">
+                        <Border.BorderBrush>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                <GradientStop Color="#EC5800" Offset="0.0" />
+                                <GradientStop Color="#F06105" Offset="0.5" />
+                                <GradientStop Color="#FF8C00" Offset="1.0" />
+                            </LinearGradientBrush>
+                        </Border.BorderBrush>
+                        <ContentPresenter VerticalAlignment="Center"
+                                  HorizontalAlignment="Center"/>
+                    </Border>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
     </Grid>
 </UserControl>

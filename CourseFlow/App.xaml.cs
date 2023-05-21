@@ -10,7 +10,7 @@ namespace CourseFlow
     public partial class App : Application
     {
         public static UserAccountModel CurrentUser { get; private set; }
-        protected void ApplicationStart(object sender, StartupEventArgs e)
+        public void ApplicationStart(object sender, StartupEventArgs e)
         {
             var loginView = new LoginView();
             loginView.Show();

@@ -19,6 +19,7 @@
     <None Remove="Images\icons8-password-16.png" />
     <None Remove="Images\icons8-user-16.png" />
     <None Remove="Images\KenetteProfilePicture.jpg" />
+    <None Remove="Images\LogOutView.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -36,6 +37,7 @@
     <Resource Include="Images\FeatureNotYetAvailable.png" />
     <Resource Include="Images\icons8-password-16.png" />
     <Resource Include="Images\icons8-user-16.png" />
+    <Resource Include="Images\LogOutView.png" />
   </ItemGroup>
 
 </Project>

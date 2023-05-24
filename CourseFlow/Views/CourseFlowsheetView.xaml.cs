@@ -1,6 +1,6 @@
 ﻿using CourseFlow.Models;
 using CourseFlow.ViewModels;
-using CourseFlow.Views.FlowsheetCRUD;
+using CourseFlow.Views.FlowsheetCRUDViews;
 using System;
 using System.Windows;
 using System.Windows.Controls;

@@ -31,7 +31,7 @@ namespace CourseFlow.Views
             Application.Current.Shutdown();
         }
 
-        private void btnLogin_Click(object sender, RoutedEventArgs e)
+        private void Signup_Click(object sender, MouseButtonEventArgs e)
         {
 
         }

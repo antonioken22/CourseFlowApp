@@ -2,7 +2,7 @@
 using System;
 using System.Windows;
 
-namespace CourseFlow.Views.FlowsheetCRUD
+namespace CourseFlow.Views.FlowsheetCRUDViews
 {
     /// <summary>
     /// Interaction logic for SubjectsCRUDView.xaml
@@ -37,7 +37,7 @@ namespace CourseFlow.Views.FlowsheetCRUD
         {
             subjectsCRUDViewModel.OnWindowLoadCommand.Execute(this);
             var temp = this.DataContext as SubjectsCRUDViewModel;
-            if(selectedSubject.HasValue && temp != null)
+            if (selectedSubject.HasValue && temp != null)
             {
                 if (!temp.LoadSelectedSubject(selectedSubject.Value))
                 {

@@ -6,7 +6,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 
-namespace CourseFlow.ViewModels.FlowsheetCRUDViewModels
+namespace CourseFlow.ViewModels
 {
     public class SubjectsCRUDViewModel : ViewModelBase
     {

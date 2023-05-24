@@ -41,11 +41,4 @@
     <Resource Include="Images\LogOutView.png" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="ViewModels\LoginViewModels\" />
-    <Folder Include="ViewModels\MainWindowViewModels\" />
-    <Folder Include="Views\LoginViews\" />
-    <Folder Include="Views\MainWindowViews\" />
-  </ItemGroup>
-
 </Project>

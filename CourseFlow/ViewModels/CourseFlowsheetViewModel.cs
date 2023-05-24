@@ -276,5 +276,20 @@ namespace CourseFlow.ViewModels
                 }
             }
         }
+
+        public Visibility CheckboxVisibility
+        {
+            get
+            {
+                if (App.CurrentUser?.Role == "Admin")
+                {
+                    return Visibility.Visible;
+                }
+                else
+                {
+                    return Visibility.Collapsed;
+                }
+            }
+        }
     }
 }

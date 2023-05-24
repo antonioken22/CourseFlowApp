@@ -1,8 +1,8 @@
-﻿using CourseFlow.ViewModels.FlowsheetCRUDViewModels;
+﻿using CourseFlow.ViewModels;
 using System;
 using System.Windows;
 
-namespace CourseFlow.Views.FlowsheetCRUDViews
+namespace CourseFlow.Views
 {
     /// <summary>
     /// Interaction logic for SubjectsCRUDView.xaml

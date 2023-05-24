@@ -62,7 +62,7 @@
             <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Right" Grid.Column="1">
                 <Button Content="Add Subjects" Click="ButtonAddSubject_Clicked" Margin="0,0,5,0" Padding="10,0"
             Visibility="{Binding ButtonVisibility}"/>
-                <CheckBox Content="Edit Mode" IsChecked="{Binding IsEditMode}" Margin="0,0,10,0" Foreground="White"/>
+                <CheckBox Content="Edit Mode" IsChecked="{Binding IsEditMode}" Visibility="{Binding CheckboxVisibility}" Margin="0,0,10,0" Foreground="White"/>
 
             </StackPanel>
 

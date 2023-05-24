@@ -33,7 +33,8 @@ namespace CourseFlow.Views
 
         private void Signup_Click(object sender, MouseButtonEventArgs e)
         {
-
+            SignupView signup = new SignupView();
+            signup.Show();
         }
     }
 }

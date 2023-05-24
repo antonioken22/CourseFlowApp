@@ -49,6 +49,7 @@ namespace CourseFlow.ViewModels
 
         private void ExecuteLoginCommand(object obj)
         {
+
             var isValidUser = /*true;*/ userRepository.AuthenticateUser(new System.Net.NetworkCredential(Username, Password));
             if (isValidUser)
             {

@@ -1,10 +1,8 @@
 ﻿using CourseFlow.Models;
 using CourseFlow.Repositories;
+using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using System;
-using System.Runtime.InteropServices;
-using System.Security;
 using System.Security.Cryptography;
-using System.Text;
 using System.Windows;
 using System.Windows.Input;
 
@@ -15,7 +13,7 @@ namespace CourseFlow.ViewModels
         // Fields
         private IUserRepository _userRepository;
         private UserModel _newUser;
-        private SecureString _confirmPassword;
+        private string _confirmPassword;
 
 
         // Properties
@@ -32,7 +30,7 @@ namespace CourseFlow.ViewModels
             }
         }
 
-        public SecureString ConfirmPassword
+        public string ConfirmPassword
         {
             get { return _confirmPassword; }
             set
@@ -46,6 +44,7 @@ namespace CourseFlow.ViewModels
         }
 
         public ICommand RegisterCommand { get; private set; }
+        public ICommand CloseWindowCommand { get; set; }
 
         public SignupViewModel()
         {
@@ -61,7 +60,7 @@ namespace CourseFlow.ViewModels
         {
             // Check if fields are not null
             if (string.IsNullOrWhiteSpace(User.Username) ||
-                User.Password == null ||
+                string.IsNullOrWhiteSpace(User.Password) ||
                 string.IsNullOrWhiteSpace(User.FirstName) ||
                 string.IsNullOrWhiteSpace(User.LastName) ||
                 string.IsNullOrWhiteSpace(User.Email) ||
@@ -71,16 +70,23 @@ namespace CourseFlow.ViewModels
                 return;
             }
 
-            // Convert SecureString to string
-            var passwordHash = HashPassword(User.Password);
-            var confirmPasswordHash = HashPassword(ConfirmPassword);
+            // generate a 128-bit salt using a secure PRNG
+            byte[] salt = new byte[128 / 8];
+            using (var rng = RandomNumberGenerator.Create())
+            {
+                rng.GetBytes(salt);
+            }
+
+            var passwordHash = HashPassword(User.Password, salt);
+            var confirmPasswordHash = HashPassword(ConfirmPassword, salt);
 
             if (passwordHash == confirmPasswordHash)
             {
-                User.Password = StringToSecureString(passwordHash); // Convert back to SecureString and store
+                User.Password = passwordHash;
+                User.Salt = Convert.ToBase64String(salt);
                 _userRepository.Add(User);
-                User = new UserModel { Role = "Student" }; // Clear the form
                 MessageBox.Show("User successfully registered.");
+                CloseWindowCommand?.Execute(null);
             }
             else
             {
@@ -88,47 +94,18 @@ namespace CourseFlow.ViewModels
             }
         }
 
-        private static SecureString StringToSecureString(string inputString)
+        public string HashPassword(string password, byte[] salt)
         {
-            SecureString securePassword = new SecureString();
+            // derive a 256-bit subkey (use HMACSHA1 with 10,000 iterations)
+            string hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
+                password: password,
+                salt: salt,
+                prf: KeyDerivationPrf.HMACSHA1,
+                iterationCount: 10000,
+                numBytesRequested: 256 / 8));
 
-            foreach (char c in inputString)
-            {
-                securePassword.AppendChar(c);
-            }
-
-            securePassword.MakeReadOnly();
-
-            return securePassword;
-        }
-
-        private string HashPassword(SecureString secureString)
-        {
-            // Convert SecureString to string
-            IntPtr unmanagedString = IntPtr.Zero;
-
-            try
-            {
-                unmanagedString = Marshal.SecureStringToGlobalAllocUnicode(secureString);
-                string plainText = Marshal.PtrToStringUni(unmanagedString);
-
-                // Compute hash from string
-                using (SHA256 sha256 = SHA256.Create())
-                {
-                    byte[] bytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(plainText));
-                    StringBuilder hash = new StringBuilder();
-                    foreach (byte b in bytes)
-                    {
-                        hash.Append(b.ToString("x2"));
-                    }
-                    return hash.ToString();
-                }
-            }
-            finally
-            {
-                // Zero and free the unmanaged string
-                Marshal.ZeroFreeGlobalAllocUnicode(unmanagedString);
-            }
+            // Combine the salt and password and return them as a string
+            return Convert.ToBase64String(salt) + ":" + hashed;
         }
     }
 }

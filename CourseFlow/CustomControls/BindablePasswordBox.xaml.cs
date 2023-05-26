@@ -1,5 +1,4 @@
-﻿using System.Security;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 
 namespace CourseFlow.CustomControls
@@ -7,9 +6,9 @@ namespace CourseFlow.CustomControls
     public partial class BindablePasswordBox : UserControl
     {
         public static readonly DependencyProperty PasswordProperty =
-            DependencyProperty.Register("Password", typeof(SecureString), typeof(BindablePasswordBox));
+            DependencyProperty.Register("Password", typeof(string), typeof(BindablePasswordBox));
 
-        public SecureString Password { get { return (SecureString)GetValue(PasswordProperty); } set { SetValue(PasswordProperty, value); } }
+        public string Password { get { return (string)GetValue(PasswordProperty); } set { SetValue(PasswordProperty, value); } }
 
         public BindablePasswordBox()
         {
@@ -20,7 +19,7 @@ namespace CourseFlow.CustomControls
 
         private void OnPasswordChanged(object sender, RoutedEventArgs e)
         {
-            Password = textPassword.SecurePassword;
+            Password = textPassword.Password;
             textVisiblePassword.Text = textPassword.Password;
         }
 

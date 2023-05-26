@@ -3,38 +3,21 @@ using System;
 using System.Collections.Generic;
 using System.Data.OleDb;
 using System.Net;
-using System.Runtime.InteropServices;
-using System.Security;
 
 namespace CourseFlow.Repositories
 {
     public class UserRepository : RepositoryBase, IUserRepository
     {
-        private string SecureStringToString(SecureString securePassword)
-        {
-            IntPtr unmanagedString = IntPtr.Zero;
-
-            try
-            {
-                unmanagedString = Marshal.SecureStringToGlobalAllocUnicode(securePassword);
-                return Marshal.PtrToStringUni(unmanagedString);
-            }
-            finally
-            {
-                Marshal.ZeroFreeGlobalAllocUnicode(unmanagedString);
-            }
-        }
-
         public void Add(UserModel userModel)
         {
             using (var connection = GetConnection())
             {
                 connection.Open();
-                using (var command = new OleDbCommand("INSERT INTO [User] (Username, [Password], FirstName, LastName, Email, Role, ProfilePicture) VALUES (@Username, @Password, @FirstName, @LastName, @Email, @Role, @ProfilePictureFilePath)", connection))
+                using (var command = new OleDbCommand("INSERT INTO [User] (Username, [Password], Salt, FirstName, LastName, Email, Role, ProfilePicture) VALUES (@Username, @Password, @Salt, @FirstName, @LastName, @Email, @Role, @ProfilePictureFilePath)", connection))
                 {
                     command.Parameters.AddWithValue("@Username", userModel.Username);
-                    string password = SecureStringToString(userModel.Password);
-                    command.Parameters.AddWithValue("@Password", password);
+                    command.Parameters.AddWithValue("@Password", userModel.Password);
+                    command.Parameters.AddWithValue("@Salt", userModel.Salt);
                     command.Parameters.AddWithValue("@FirstName", userModel.FirstName);
                     command.Parameters.AddWithValue("@LastName", userModel.LastName);
                     command.Parameters.AddWithValue("@Email", userModel.Email);
@@ -120,6 +103,37 @@ namespace CourseFlow.Repositories
                 throw new Exception("An error occurred while retrieving the user by username.", ex);
             }
             return user;
+        }
+
+        public string GetSaltByUsername(string UserName)
+        {
+            string salt = null;
+            try
+            {
+                using (var connection = GetConnection())
+                {
+                    connection.Open();
+                    using (var command = new OleDbCommand())
+                    {
+                        command.Connection = connection;
+                        command.CommandText = "SELECT Salt FROM [User] WHERE Username = @Username";
+                        command.Parameters.AddWithValue("@Username", UserName);
+                        using (var reader = command.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                salt = reader["Salt"].ToString();
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log error or throw exception as per your requirement
+                throw new Exception("An error occurred while retrieving the user by username.", ex);
+            }
+            return salt;
         }
     }
 }

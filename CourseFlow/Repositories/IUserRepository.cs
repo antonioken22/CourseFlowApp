@@ -18,6 +18,8 @@ namespace CourseFlow.Repositories
 
         UserModel GetByUsername(string username);
 
+        string GetSaltByUsername(string username);
+
         IEnumerable<UserModel> GetByAll();
 
         // ...

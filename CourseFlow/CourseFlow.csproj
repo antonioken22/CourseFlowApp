@@ -24,6 +24,7 @@
 
   <ItemGroup>
     <PackageReference Include="FontAwesome.WPF" Version="4.7.0.9" />
+    <PackageReference Include="Microsoft.AspNetCore.Cryptography.KeyDerivation" Version="7.0.5" />
     <PackageReference Include="MvvmLightLibs" Version="5.4.1.1" />
     <PackageReference Include="System.Data.OleDb" Version="8.0.0-preview.3.23174.8" />
     <PackageReference Include="System.Windows.Interactivity.WPF" Version="2.0.20525" />

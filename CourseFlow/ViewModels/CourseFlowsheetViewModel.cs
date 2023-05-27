@@ -135,6 +135,7 @@ namespace CourseFlow.ViewModels
 
             HoveredSubject = subject;
             subject.BackgroundColor = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#eee"));
+            subject.TextColor = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#800000"));
             var subjectRelationships = _subjectRelationshipRepository.GetSubjectRelationshipsBySubject(subject.Id);
             foreach (var subjectRelationship in subjectRelationships)
             {
@@ -145,18 +146,22 @@ namespace CourseFlow.ViewModels
                     {
                         case 1: // Pre-requisite
                             relatedSubject.BackgroundColor = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#ffe54a"));
+                            relatedSubject.TextColor = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#800000"));
                             break;
                         case 2: // Co-requisite
                             relatedSubject.BackgroundColor = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#98ff6e"));
+                            relatedSubject.TextColor = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#800000"));
                             break;
                         case 3: // Post-requisite
                             relatedSubject.BackgroundColor = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#a1f8ff"));
+                            relatedSubject.TextColor = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#800000"));
                             break;
                     }
                 }
             }
             OnPropertyChanged(nameof(FlowsheetData));
             OnPropertyChanged(nameof(SubjectModel.BackgroundColor));
+            OnPropertyChanged(nameof(SubjectModel.TextColor));
         }
 
         private void OnSubjectMouseLeave()
@@ -166,6 +171,7 @@ namespace CourseFlow.ViewModels
                 return;
             }
             HoveredSubject.BackgroundColor = Brushes.Transparent;
+            HoveredSubject.TextColor = Brushes.White;
             var subjectRelationships = _subjectRelationshipRepository.GetSubjectRelationshipsBySubject(HoveredSubject.Id);
             foreach (var subjectRelationship in subjectRelationships)
             {
@@ -173,6 +179,7 @@ namespace CourseFlow.ViewModels
                 if (relatedSubject != null)
                 {
                     relatedSubject.BackgroundColor = Brushes.Transparent;
+                    relatedSubject.TextColor = Brushes.White;
                 }
             }
 

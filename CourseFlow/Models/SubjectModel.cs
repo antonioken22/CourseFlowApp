@@ -27,6 +27,25 @@ namespace CourseFlow.Models
             }
         }
 
+        Brush _TextColor;
+
+        public Brush TextColor
+        {
+            get => _TextColor;
+            set
+            {
+                if (value != null)
+                {
+                    _TextColor = value;
+                    OnPropertyChanged(nameof(TextColor));
+                }
+            }
+        }
+        public SubjectModel()
+        {
+            _TextColor = Brushes.White;
+        }
+
         public event PropertyChangedEventHandler? PropertyChanged;
 
         internal void OnPropertyChanged([CallerMemberName] string propertyName = null)
